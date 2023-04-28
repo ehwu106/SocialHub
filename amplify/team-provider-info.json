@@ -14,6 +14,9 @@
     "categories": {
       "auth": {
         "socialhub3b6d59cd": {}
+      },
+      "api": {
+        "socialhub": {}
       }
     }
   }

@@ -16,7 +16,7 @@ function Dashboard() {
     <Authenticator>
       {({ signOut, user }) => (
         <main>
-          <h1>Hello {user.username}</h1>
+          <h1>Hello {user.username}. This is where our cotents go....</h1>
           <button onClick={signOut}>Sign out</button>
         </main>
       )}
@@ -24,5 +24,4 @@ function Dashboard() {
  )
 }
 
-//6.
-export default Dashboard
+export default Dashboard;
