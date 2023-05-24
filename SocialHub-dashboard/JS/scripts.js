@@ -1,4 +1,4 @@
-//SIDEBAR TOGGLE
+///////////////////SIDEBAR TOGGLE//////////////////////
 
 var sidebarOpen = false;
 var sidebar = document.getElementById("sidebar");
@@ -15,9 +15,9 @@ function closeSidebar(){
         sidebarOpen = false;
     }
 }
+///////////////////END//////////////////////
 
-//charts
-
+///////////////////CHARTS////////////////////
 var barChartOptions = {
     series: [{
     data: [10200, 2500, 7000]
@@ -161,4 +161,637 @@ var barChartOptions = {
   var areaChart = new ApexCharts(document.querySelector("#area-chart"), areaChartOptions);
   areaChart.render();
 
+  var barChartOptions3 = {
+    series: [{
+    data: [10200, 2500, 7000, 2340, 5550, 11111, 4567,10200, 2500, 7000, 2340, 5550]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
 
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['week1', 'week2', 'week3','week4','week5','week6','week7','week8','week9','week10','week11','week12'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var barChart3 = new ApexCharts(document.querySelector("#bar-chart3"), barChartOptions3);
+  barChart3.render();
+
+  var barChartOptions4 = {
+    series: [{
+    data: [10200, 92500, 27000, 24340, 56550, 31111, 45667,81000, 52500, 47000, 25340, 55560]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+
+  var barChart4 = new ApexCharts(document.querySelector("#bar-chart4"), barChartOptions4);
+  barChart4.render();
+
+
+
+
+  var barChartOptions5 = {
+    series: [{
+    data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+
+
+
+  
+  var barChart5 = new ApexCharts(document.querySelector("#bar-chart5"), barChartOptions5);
+  barChart5.render();
+
+
+  var weekOptions_fl = {
+    series: [{
+    data: [1200, 2500, 778, 2340, 4000, 1700,2100]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var weekChart_fl = new ApexCharts(document.querySelector("#weekChart_fl"), weekOptions_fl);
+  weekChart_fl.render();
+
+  var weekOptions_vw = {
+    series: [{
+    data: [2000, 5000, 3000, 2500, 4000, 1700,2100]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var weekChart_vw = new ApexCharts(document.querySelector("#weekChart_vw"), weekOptions_vw);
+  weekChart_vw.render();
+
+
+  var weekOptions_likes = {
+    series: [{
+    data: [2000, 5000, 3000, 2500, 4000, 1700,2100]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var weekChart_likes = new ApexCharts(document.querySelector("#weekChart_likes"), weekOptions_likes);
+  weekChart_likes.render();
+
+
+
+  var monthOptions_fl = {
+    series: [{
+    data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var monthChart_fl = new ApexCharts(document.querySelector("#monthChart_fl"), monthOptions_fl);
+  monthChart_fl.render();
+
+  var monthOptions_vw = {
+    series: [{
+    data: [59, 47, 111, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var monthChart_vw = new ApexCharts(document.querySelector("#monthChart_vw"), monthOptions_vw);
+  monthChart_vw.render();
+
+  var monthOptions_likes = {
+    series: [{
+    data: [200, 47, 111, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+  var monthChart_likes = new ApexCharts(document.querySelector("#monthChart_likes"), monthOptions_likes);
+  monthChart_likes.render();
+
+  var yearOptions_fl = {
+    series: [{
+    data: [10200, 92500, 27000, 24340, 56550, 31111, 45667,81000, 52500, 47000, 25340, 55560]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+
+  var yearChart_fl = new ApexCharts(document.querySelector("#yearChart_fl"), yearOptions_fl);
+  yearChart_fl.render();
+
+  var yearOptions_vw = {
+    series: [{
+    data: [10200, 92500, 27000, 24340, 56550, 31111, 45667,81000, 52500, 47000, 25340, 557560]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+
+  var yearChart_vw = new ApexCharts(document.querySelector("#yearChart_vw"), yearOptions_vw);
+  yearChart_vw.render();
+
+  var yearOptions_likes = {
+    series: [{
+    data: [10200, 92500, 27000, 24340, 96550, 31111, 453667,81000, 52500, 47000, 25340, 557560]
+  }],
+    chart: {
+    type: 'bar',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    "#cc3c43",
+    "#367952",
+    "#f5b74f"
+  ],
+  plotOptions: {
+    bar: {
+      distributed: true,
+      borderRadius: 4,
+      horizontal: false,
+      columnWidth:'40%',
+
+    }
+  },
+  dataLabels: {
+    enabled: false
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+  };
+
+  var yearChart_likes = new ApexCharts(document.querySelector("#yearChart_likes"), yearOptions_likes);
+  yearChart_likes.render();
+
+  ///////////////////END/////////////////////
+
+
+////////////////expend_hide_button_animations/////////////////////////
+  document.getElementById('expend_btn').addEventListener('click', function() {
+    var element1 = document.querySelector('.card_extra');
+    var element2 = document.querySelector('#expend_btn');
+    var element3 = document.querySelector('#hide_btn');
+  
+    // Change display property to "block" (or any other valid value)
+    element1.style.display = 'grid';
+    element2.style.display = 'none';
+    element3.style.display = 'inline';
+
+    
+
+  });
+
+  document.getElementById('hide_btn').addEventListener('click', function() {
+    var element1 = document.querySelector('.card_extra');
+    var element2 = document.querySelector('#hide_btn');
+    var element3 = document.querySelector('#expend_btn');
+  
+    // Change display property to "block" (or any other valid value)
+    element1.style.display = 'none';
+    element2.style.display = 'none';
+    element3.style.display = 'inline';
+  });
+
+////////////////END/////////////////////////
+
+ ////////////////FLT_BTN///////////////////
+
+ 
+ document.getElementById('daily_btn').addEventListener('click', function() {
+  var element1 = document.querySelector('.chart_daily');
+  var element2 = document.querySelector('.chart_weekly');
+  var element3 = document.querySelector('.chart_monthly');
+
+  // Change display property to "block" (or any other valid value)
+  element1.style.display = 'grid';
+  element2.style.display = 'none';
+  element3.style.display = 'none';
+
+  
+
+});
+
+document.getElementById('weekly_btn').addEventListener('click', function() {
+  var element1 = document.querySelector('.chart_weekly');
+  var element2 = document.querySelector('.chart_daily');
+  var element3 = document.querySelector('.chart_monthly');
+
+  // Change display property to "block" (or any other valid value)
+  element1.style.display = 'grid';
+  element2.style.display = 'none';
+  element3.style.display = 'none';
+
+  
+
+});
+
+document.getElementById('monthly_btn').addEventListener('click', function() {
+  var element1 = document.querySelector('.chart_monthly');
+  var element2 = document.querySelector('.chart_weekly');
+  var element3 = document.querySelector('.chart_daily');
+
+  // Change display property to "block" (or any other valid value)
+  element1.style.display = 'grid';
+  element2.style.display = 'none';
+  element3.style.display = 'none';
+});
+
+ //////////////////////end////////////////
+////////////////YT_JS_BOX_STATS/////////////////////////
+  var yt_followers = 222222;
+  var yt_likes =111;
+  var yt_views =999;
+  var yt_followers_w = 2222223;
+  var yt_likes_w =1113;
+  var yt_views_w =9993;
+  var yt_followers_m = 2222224;
+  var yt_likes_m =1114;
+  var yt_views_m =9994;
+
+document.getElementById('yt_followers').textContent = yt_followers;
+document.getElementById('yt_likes').textContent = yt_likes;
+document.getElementById('yt_views').textContent = yt_views;
+document.getElementById('yt_followers_w').textContent = yt_followers_w;
+document.getElementById('yt_likes_w').textContent = yt_likes_w;
+document.getElementById('yt_views_w').textContent = yt_views_w;
+document.getElementById('yt_followers_m').textContent = yt_followers_m;
+document.getElementById('yt_likes_m').textContent = yt_likes_m;
+document.getElementById('yt_views_m').textContent = yt_views_m;
+////////////////END/////////////////////////

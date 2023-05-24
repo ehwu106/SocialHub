@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>SH-Dashboard</title>
+
+    <!--Special Font-->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--Material icons-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS-->
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="grid-container">
+      <!--Header start-->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined">search</span>
+        </div>
+        <div class="header-right">
+          <span class="material-icons-outlined">settings</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
+      </header>
+      <!--Header end-->
+
+      <!--Sidebar start-->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <span class="material-icons-outlined">dashboard</span>SocialHub
+          </div>
+          <span class="material-icons-outlined" onclick="closeSidebar()"
+            >close</span
+          >
+        </div>
+
+        <ul class="sidebar-list">
+          <style>
+            a {
+              text-decoration: none;
+            }
+          </style>
+
+          <a href="index.html">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">home</span>Dashboard
+            </li>
+          </a>
+
+          <a href="yt_dashboard.html">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">label_important</span>
+              YouTube
+            </li>
+          </a>
+
+          <a href="https://www.example.com">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">label_important</span>
+              Facebook
+            </li>
+          </a>
+
+          <a href="https://www.example.com">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">label_important</span>
+              Twitter
+            </li>
+          </a>
+        </ul>
+      </aside>
+      <!--Sidebar end-->
+
+      <!--Main start-->
+      <main class="main-container">
+        <div class="main-title">
+          <p class="font-weight-bold">YOUTUBE</p>
+          <button id="expend_btn">expend</button>
+          <button id="hide_btn">hide</button>
+        </div>
+
+        <div class="main-cards">
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">FOLLOWES</p>
+              <span class="material-icons-outlined text-blue">groups</span>
+            </div>
+            <!--<span class="text-primary font-weight-bold"> 10347</span>  -->
+            <span
+              id="yt_followers"
+              class="text-primary font-weight-bold"
+            ></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">VIEWS</p>
+              <span class="material-icons-outlined text-blue">movie</span>
+            </div>
+            <span id="yt_views" class="text-primary font-weight-bold"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">LIKES</p>
+              <span class="material-icons-outlined text-blue">thumb_up</span>
+            </div>
+            <span id="yt_likes" class="text-primary font-weight-bold"></span>
+          </div>
+        </div>
+
+        <div class="card_extra">
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">WEEKLY FOLLOWES</p>
+              <span class="material-icons-outlined text-blue">groups</span>
+            </div>
+            <span
+              id="yt_followers_w"
+              class="text-primary font-weight-bold"
+            ></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">WEEKLY VIEWS</p>
+              <span class="material-icons-outlined text-blue">movie</span>
+            </div>
+            <span id="yt_views_w" class="text-primary font-weight-bold"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">WEEKLY LIKES</p>
+              <span class="material-icons-outlined text-blue">thumb_up</span>
+            </div>
+            <span id="yt_likes_w" class="text-primary font-weight-bold"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Monthly FOLLOWES</p>
+              <span class="material-icons-outlined text-blue">groups</span>
+            </div>
+            <span
+              id="yt_followers_m"
+              class="text-primary font-weight-bold"
+            ></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Monthly VIEWS</p>
+              <span class="material-icons-outlined text-blue">movie</span>
+            </div>
+            <span id="yt_views_m" class="text-primary font-weight-bold"></span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">Monthly LIKES</p>
+              <span class="material-icons-outlined text-blue">thumb_up</span>
+            </div>
+            <span id="yt_likes_m" class="text-primary font-weight-bold"></span>
+          </div>
+        </div>
+        <div class="fltr_btn">
+          <button id="daily_btn">weekly</button>
+          <button id="weekly_btn">monthly</button>
+          <button id="monthly_btn">yearly</button>
+        </div>
+
+        <div class="chart_daily">
+          <div class="charts-card">
+            <p class="chart-title">FOLLOWERS GROWTH</p>
+            <div id="weekChart_fl"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">VIEWS GROWTH</p>
+            <div id="weekChart_vw"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">LIKES GROWTH</p>
+            <div id="weekChart_likes"></div>
+          </div>
+        </div>
+
+        <div class="chart_weekly">
+          <div class="charts-card">
+            <p class="chart-title">FOLLOWERS GROWTH</p>
+            <div id="monthChart_fl"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">VIEWS GROWTH</p>
+            <div id="monthChart_vw"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">LIKES GROWTH</p>
+            <div id="monthChart_likes"></div>
+          </div>
+        </div>
+
+        <div class="chart_monthly">
+          <div class="charts-card">
+            <p class="chart-title">FOLLOWERS GROWTH</p>
+            <div id="yearChart_fl"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">VIEWS GROWTH</p>
+            <div id="yearChart_vw"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">LIKES GROWTH</p>
+            <div id="yearChart_likes"></div>
+          </div>
+        </div>
+      </main>
+      <!--Main end-->
+    </div>
+    <!--SCRIPTS-->
+    <!--apexcharts-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.40.0/apexcharts.min.js"></script>
+    <!--custom js-->
+    <script src="JS/scripts.js"></script>
+  </body>
+</html>
