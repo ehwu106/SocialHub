@@ -1,15 +1,19 @@
 import React from 'react'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import './App.css'
+//import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
+//import './App.css'
 
-import { BrowserRouter as Router, Link } from 'react-router-dom'
+import { BrowserRouter as Router, Link, Route, Routes } from 'react-router-dom'
 import Dashboard from './dashboard'
+import MainDashboard from './components/Dashboard/MainDashboard.jsx'
 
 function App() {
-  const isLoggedIn =window.localStorage.getItem("loggedIn");
+  const isLoggedIn = window.localStorage.getItem("loggedIn");
   return (
     <Router>
-      <div className="App">
+      <Routes>
+        <Route path="/dashboardfb" element={<MainDashboard/>}/>
+      </Routes>
+      {/*<div className="App">
         <header className="App-header">
           <Dashboard/>
         </header>
@@ -30,11 +34,16 @@ function App() {
                     Sign up
                   </Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to={'/dashboardfb'}>
+                    dashboardfb
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
         </nav>
-      </div>
+      </div>*/}
     </Router>
   )
 }

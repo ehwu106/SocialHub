@@ -3,13 +3,13 @@
 import React from 'react';
 import { Amplify } from 'aws-amplify';
 //2.
-import awsExports from './aws-exports';
+//import awsExports from './aws-exports';
 //3.
 import { Authenticator } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
 
 //4.
-Amplify.configure(awsExports)
+//Amplify.configure(awsExports)
 
 function Dashboard() {
  return(
