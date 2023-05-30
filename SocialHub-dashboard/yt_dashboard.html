@@ -43,7 +43,10 @@
           <div class="sidebar-brand">
             <span class="material-icons-outlined">dashboard</span>SocialHub
           </div>
-          <span class="material-icons-outlined" onclick="closeSidebar()"
+          <span
+            class="material-icons-outlined"
+            id="close_btn"
+            onclick="closeSidebar()"
             >close</span
           >
         </div>
@@ -178,10 +181,17 @@
             <span id="yt_likes_m" class="text-primary font-weight-bold"></span>
           </div>
         </div>
-        <div class="fltr_btn">
-          <button id="daily_btn">weekly</button>
-          <button id="weekly_btn">monthly</button>
-          <button id="monthly_btn">yearly</button>
+        <div class="button-container">
+          <div class="left-buttons">
+            <button id="daily_btn">weekly</button>
+            <button id="weekly_btn">monthly</button>
+            <button id="monthly_btn">yearly</button>
+          </div>
+
+          <div class="right-buttons">
+            <button id="bar_btn">Bar Chart</button>
+            <button id="lnr_btn">Linear Chart</button>
+          </div>
         </div>
 
         <div class="chart_daily">
@@ -201,6 +211,21 @@
           </div>
         </div>
 
+        <div class="chart_weekly_l">
+          <div class="charts-card">
+            <p class="chart-title">FOLLOWERS GROWTH</p>
+            <div id="weekChart_fl_linear"></div>
+          </div>
+          <div class="charts-card">
+            <p class="chart-title">VIEWS GROWTH</p>
+            <div id="weekChart_vw_linear"></div>
+          </div>
+          <div class="charts-card">
+            <p class="chart-title">LIKES GROWTH</p>
+            <div id="weekChart_likes_linear"></div>
+          </div>
+        </div>
+
         <div class="chart_weekly">
           <div class="charts-card">
             <p class="chart-title">FOLLOWERS GROWTH</p>
@@ -215,6 +240,20 @@
           <div class="charts-card">
             <p class="chart-title">LIKES GROWTH</p>
             <div id="monthChart_likes"></div>
+          </div>
+        </div>
+        <div class="chart_monthly_l">
+          <div class="charts-card">
+            <p class="chart-title">FOLLOWERS GROWTH</p>
+            <div id="monthChart_fl_linear"></div>
+          </div>
+          <div class="charts-card">
+            <p class="chart-title">VIEWS GROWTH</p>
+            <div id="monthChart_vw_linear"></div>
+          </div>
+          <div class="charts-card">
+            <p class="chart-title">LIKES GROWTH</p>
+            <div id="monthChart_likes_linear"></div>
           </div>
         </div>
 
@@ -232,6 +271,21 @@
           <div class="charts-card">
             <p class="chart-title">LIKES GROWTH</p>
             <div id="yearChart_likes"></div>
+          </div>
+        </div>
+
+        <div class="chart_yearly_l">
+          <div class="charts-card">
+            <p class="chart-title">FOLLOWERS GROWTH</p>
+            <div id="yearChart_fl_linear"></div>
+          </div>
+          <div class="charts-card">
+            <p class="chart-title">VIEWS GROWTH</p>
+            <div id="yearChart_vw_linear"></div>
+          </div>
+          <div class="charts-card">
+            <p class="chart-title">LIKES GROWTH</p>
+            <div id="yearChart_likes_linear"></div>
           </div>
         </div>
       </main>

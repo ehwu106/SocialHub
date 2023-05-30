@@ -700,6 +700,384 @@ var barChartOptions = {
   var yearChart_likes = new ApexCharts(document.querySelector("#yearChart_likes"), yearOptions_likes);
   yearChart_likes.render();
 
+
+  var montlyOptions_fl_linear = {
+    series: [{
+      name: 'YouTube',
+    data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+  }],
+    chart: {
+    type: 'area',
+    height: 350,
+    toolbar:{
+        show:false
+    },
+  },
+  colors:[
+    
+    "#f5b74f"
+  ],
+  plotOptions: {
+    
+  },
+  dataLabels: {
+    enabled: false
+  },
+  stroke: {
+    curve: 'smooth'
+  },
+  legend:{
+    show:false
+  },
+  xaxis: {
+    categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+  },
+  yaxis:{
+    title:{
+        text: "Count"
+    }
+  }
+
+  };
+var monthChart_fl_linear = new ApexCharts(document.querySelector("#monthChart_fl_linear"), montlyOptions_fl_linear);
+monthChart_fl_linear.render();
+
+var montlyOptions_vw_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var monthChart_vw_linear = new ApexCharts(document.querySelector("#monthChart_vw_linear"), montlyOptions_vw_linear);
+monthChart_vw_linear.render();
+
+var montlyOptions_likes_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['1', '2', '3','4','5','6', '7', '8', '9', '10',
+   '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var monthChart_likes_linear = new ApexCharts(document.querySelector("#monthChart_likes_linear"), montlyOptions_likes_linear);
+monthChart_likes_linear.render();
+
+var yearlyOptions_likes_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var yearChart_likes_linear = new ApexCharts(document.querySelector("#yearChart_likes_linear"), yearlyOptions_likes_linear);
+yearChart_likes_linear.render();
+
+
+var yearlyOptions_vw_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var yearChart_vw_linear = new ApexCharts(document.querySelector("#yearChart_vw_linear"), yearlyOptions_vw_linear);
+yearChart_vw_linear.render();
+
+
+
+var yearlyOptions_fl_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [1000,2000,3000,4000,5000,6000,7000,8000,9000,10000,11000,12000]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['Jan', 'Feb', 'Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var yearChart_fl_linear = new ApexCharts(document.querySelector("#yearChart_fl_linear"), yearlyOptions_fl_linear);
+yearChart_fl_linear.render();
+
+var weeklyOptions_fl_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [1000,2000,3000,4000,5000,6000,7000]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var weekChart_fl_linear = new ApexCharts(document.querySelector("#weekChart_fl_linear"), weeklyOptions_fl_linear);
+weekChart_fl_linear.render();
+
+var weeklyOptions_vw_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [1000,2000,3000,4000,5000,6000,7000]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var weekChart_vw_linear = new ApexCharts(document.querySelector("#weekChart_vw_linear"), weeklyOptions_vw_linear);
+weekChart_vw_linear.render();
+
+var weeklyOptions_likes_linear = {
+  series: [{
+    name: 'YouTube',
+  data: [1000,2000,3000,4000,5000,6000,7000]
+}],
+  chart: {
+  type: 'area',
+  height: 350,
+  toolbar:{
+      show:false
+  },
+},
+colors:[
+  
+  "#f5b74f"
+],
+plotOptions: {
+  
+},
+dataLabels: {
+  enabled: false
+},
+stroke: {
+  curve: 'smooth'
+},
+legend:{
+  show:false
+},
+xaxis: {
+  categories: ['Monday', 'Tuesday', 'Wednesday','Thursday','Friday','Saturday','Sunday'],
+},
+yaxis:{
+  title:{
+      text: "Count"
+  }
+}
+
+};
+var weekChart_likes_linear = new ApexCharts(document.querySelector("#weekChart_likes_linear"), weeklyOptions_likes_linear);
+weekChart_likes_linear.render();
   ///////////////////END/////////////////////
 
 
@@ -718,6 +1096,8 @@ var barChartOptions = {
 
   });
 
+ 
+
   document.getElementById('hide_btn').addEventListener('click', function() {
     var element1 = document.querySelector('.card_extra');
     var element2 = document.querySelector('#hide_btn');
@@ -733,17 +1113,108 @@ var barChartOptions = {
 
  ////////////////FLT_BTN///////////////////
 
- 
+ var chart_type=1;
+ var chart_period=1;
+ document.getElementById('bar_btn').addEventListener('click', function() {
+  var element1 = document.querySelector('.chart_daily');
+  var element2 = document.querySelector('.chart_weekly');
+  var element3 = document.querySelector('.chart_monthly');
+  var element4 = document.querySelector('.chart_weekly_l');
+  var element5 = document.querySelector('.chart_monthly_l');
+  var element6 = document.querySelector('.chart_yearly_l');
+  chart_type=1;
+
+  // Change display property to "block" (or any other valid value)
+  if(chart_period==1){
+  element1.style.display = 'grid';
+  element2.style.display = 'none';
+  element3.style.display = 'none';
+  element4.style.display = 'none';
+  element5.style.display = 'none';
+  element6.style.display = 'none';
+  }
+  if(chart_period==2){
+    element1.style.display = 'none';
+    element2.style.display = 'grid';
+    element3.style.display = 'none';
+    element4.style.display = 'none';
+    element5.style.display = 'none';
+    element6.style.display = 'none';
+    }
+    if(chart_period==3){
+      element1.style.display = 'none';
+      element2.style.display = 'none';
+      element3.style.display = 'grid';
+      element4.style.display = 'none';
+      element5.style.display = 'none';
+      element6.style.display = 'none';
+      }
+  
+
+});
+document.getElementById('lnr_btn').addEventListener('click', function() {
+  var element1 = document.querySelector('.chart_daily');
+  var element2 = document.querySelector('.chart_weekly');
+  var element3 = document.querySelector('.chart_monthly');
+  var element4 = document.querySelector('.chart_weekly_l');
+  var element5 = document.querySelector('.chart_monthly_l');
+  var element6 = document.querySelector('.chart_yearly_l');
+  chart_type=2;
+
+  // Change display property to "block" (or any other valid value)
+  if(chart_period==1){
+  element1.style.display = 'none';
+  element2.style.display = 'none';
+  element3.style.display = 'none';
+  element4.style.display = 'grid';
+  element5.style.display = 'none';
+  element6.style.display = 'none';
+  }
+  if(chart_period==2){
+    element1.style.display = 'none';
+    element2.style.display = 'none';
+    element3.style.display = 'none';
+    element4.style.display = 'none';
+    element5.style.display = 'grid';
+    element6.style.display = 'none';
+    }
+    if(chart_period==3){
+      element1.style.display = 'none';
+      element2.style.display = 'none';
+      element3.style.display = 'none';
+      element4.style.display = 'none';
+      element5.style.display = 'none';
+      element6.style.display = 'grid';
+      }
+  
+
+});
  document.getElementById('daily_btn').addEventListener('click', function() {
   var element1 = document.querySelector('.chart_daily');
   var element2 = document.querySelector('.chart_weekly');
   var element3 = document.querySelector('.chart_monthly');
+  var element4 = document.querySelector('.chart_weekly_l');
+  var element5 = document.querySelector('.chart_monthly_l');
+  var element6 = document.querySelector('.chart_yearly_l');
+  chart_period=1;
 
   // Change display property to "block" (or any other valid value)
+  if(chart_type==1){
   element1.style.display = 'grid';
   element2.style.display = 'none';
   element3.style.display = 'none';
-
+  element4.style.display = 'none';
+  element5.style.display = 'none';
+  element6.style.display = 'none';
+  }
+  if(chart_type==2){
+    element1.style.display = 'none';
+    element2.style.display = 'none';
+    element3.style.display = 'none';
+    element4.style.display = 'grid';
+    element5.style.display = 'none';
+    element6.style.display = 'none';
+    }
   
 
 });
@@ -752,12 +1223,29 @@ document.getElementById('weekly_btn').addEventListener('click', function() {
   var element1 = document.querySelector('.chart_weekly');
   var element2 = document.querySelector('.chart_daily');
   var element3 = document.querySelector('.chart_monthly');
+  var element4 = document.querySelector('.chart_weekly_l');
+  var element5 = document.querySelector('.chart_monthly_l');
+  var element6 = document.querySelector('.chart_yearly_l');
+  chart_period=2;
 
   // Change display property to "block" (or any other valid value)
+  if(chart_type==1){
   element1.style.display = 'grid';
   element2.style.display = 'none';
   element3.style.display = 'none';
-
+  element4.style.display = 'none';
+  element5.style.display = 'none';
+  element6.style.display = 'none';
+  }
+  if(chart_type==2){
+    element1.style.display = 'none';
+    element2.style.display = 'none';
+    element3.style.display = 'none';
+    element4.style.display = 'none';
+    element5.style.display = 'grid';
+    element6.style.display = 'none';
+    }
+  
   
 
 });
@@ -766,24 +1254,42 @@ document.getElementById('monthly_btn').addEventListener('click', function() {
   var element1 = document.querySelector('.chart_monthly');
   var element2 = document.querySelector('.chart_weekly');
   var element3 = document.querySelector('.chart_daily');
+  var element4 = document.querySelector('.chart_weekly_l');
+  var element5 = document.querySelector('.chart_monthly_l');
+  var element6 = document.querySelector('.chart_yearly_l');
+  chart_period=3;
 
   // Change display property to "block" (or any other valid value)
+  if(chart_type==1){
   element1.style.display = 'grid';
   element2.style.display = 'none';
   element3.style.display = 'none';
+  element4.style.display = 'none';
+  element5.style.display = 'none';
+  element6.style.display = 'none';
+  }
+  if(chart_type==2){
+    element1.style.display = 'none';
+    element2.style.display = 'none';
+    element3.style.display = 'none';
+    element4.style.display = 'none';
+    element5.style.display = 'none';
+    element6.style.display = 'grid';
+    }
 });
 
  //////////////////////end////////////////
 ////////////////YT_JS_BOX_STATS/////////////////////////
-  var yt_followers = 222222;
-  var yt_likes =111;
-  var yt_views =999;
-  var yt_followers_w = 2222223;
-  var yt_likes_w =1113;
-  var yt_views_w =9993;
-  var yt_followers_m = 2222224;
-  var yt_likes_m =1114;
-  var yt_views_m =9994;
+  var yt_followers = 111;
+  var yt_likes =222;
+  var yt_views =333;
+  var yt_followers_w = 1111;
+  var yt_likes_w =2222;
+  var yt_views_w =3333;
+  var yt_followers_m = 11111;
+  var yt_likes_m =22222;
+  var yt_views_m =33333;
+
 
 document.getElementById('yt_followers').textContent = yt_followers;
 document.getElementById('yt_likes').textContent = yt_likes;
@@ -794,4 +1300,6 @@ document.getElementById('yt_views_w').textContent = yt_views_w;
 document.getElementById('yt_followers_m').textContent = yt_followers_m;
 document.getElementById('yt_likes_m').textContent = yt_likes_m;
 document.getElementById('yt_views_m').textContent = yt_views_m;
+
+
 ////////////////END/////////////////////////
