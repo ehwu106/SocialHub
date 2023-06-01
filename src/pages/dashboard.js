@@ -15,6 +15,8 @@ import {
 import Youtube from './youtube';
 import SignOutButton from './signoutbutton';
 
+import { Auth } from 'aws-amplify';
+
 const MainDashboard = (props) => {
   const fbstate = useState(null);
   const [userState, setUserState] = useState(null);
@@ -707,25 +709,25 @@ const MainDashboard = (props) => {
 
             <ul className="sidebar-list">
               <style>{`a { text-decoration: none; }`}</style>
-              <Link to="/MainDashboard">
+              <NavLink to="/MainDashboard" activeClassName="active-link">
                 <li className="sidebar-list-item">
                   <span className="material-icons-outlined">home</span>Dashboard
                 </li>
-              </Link>
+              </NavLink>
 
-              <Link to="/dashboard_yt">
+              <NavLink to="/dashboard_yt" activeClassName="active-link">
                 <li className="sidebar-list-item">
                   <span className="material-icons-outlined">label_important</span>
                   YouTube
                 </li>
-              </Link>
+              </NavLink>
 
-              <Link to="/dashboard_fb">
+              <NavLink to="/dashboard_fb">
                 <li className="sidebar-list-item">
                   <span className="material-icons-outlined">label_important</span>
                   Facebook
                 </li>
-              </Link>
+              </NavLink>
 
               <a href="https://www.example.com">
                 <li className="sidebar-list-item">
