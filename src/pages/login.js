@@ -36,45 +36,6 @@
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// import logo from "../logo.svg";
-// import "@aws-amplify/ui-react/styles.css";
-// import {
-//   withAuthenticator,
-//   Button,
-//   Heading,
-//   Image,
-//   View,
-//   Card,
-// } from "@aws-amplify/ui-react";
-// import MainDashboard from "./dashboard";
-
-// import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
-
-
-// function Login({ signOut }) {
-//   return (
-//     <View className="App">
-//       <Card>
-//         <MainDashboard />
-//       </Card>
-//       <Button onClick={signOut}>Sign Out</Button>
-//     </View>
-//   );
-// }
-
-// export default withAuthenticator(Login);
-
-
-
-
-
-
-
-
-
-
-
-
 import logo from "../logo.svg";
 import "@aws-amplify/ui-react/styles.css";
 import {
@@ -86,15 +47,53 @@ import {
   Card,
 } from "@aws-amplify/ui-react";
 import MainDashboard from "./dashboard";
-import AppLayout from "./applayout";
+
+import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
 
 
 function Login({ signOut }) {
   return (
-    <AppLayout signOut={signOut}>
-      <MainDashboard />
-    </AppLayout>
+    <View className="App">
+        <MainDashboard />
+      <Button onClick={signOut}>Sign Out</Button>
+    </View>
   );
 }
 
 export default withAuthenticator(Login);
+
+
+
+
+
+
+
+
+
+
+// import logo from "../logo.svg";
+// import "@aws-amplify/ui-react/styles.css";
+// import {
+//   withAuthenticator,
+//   Button,
+//   Heading,
+//   Image,
+//   View,
+//   Card,
+// } from "@aws-amplify/ui-react";
+// import MainDashboard from "./dashboard";
+// import AppLayout from "./applayout";
+
+
+// function Login({ signOut }) {
+//   return (
+//     <AppLayout signOut={signOut}>
+//       <MainDashboard />
+//     </AppLayout>
+//   );
+// }
+
+// export default withAuthenticator(Login);
+
+
+

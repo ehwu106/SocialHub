@@ -69,6 +69,7 @@ body{
 
 .menu-icon{
     display: none;
+    
 }
 /*sidebar*/
 #sidebar{
@@ -268,18 +269,25 @@ body{
     gap: 20px;
     /*display: none;*/
 }
-.chart_weekly{
+.chart_weekly,.chart_monthly_l{
     display: none;
     grid-template-columns: 1fr;
     gap: 20px;
     /*display: none;*/
 }
-.chart_monthly{
+.chart_monthly,.chart_yearly_l{
     display: none;
     grid-template-columns: 1fr;
     gap: 20px;
     /*display: none;*/
 }
+.chart_weekly_l{
+    display: none;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+
 .charts-card2{
     background-color: rgb(215, 219, 250);
     margin-bottom: 20px;
@@ -308,11 +316,52 @@ body{
     color:#246dec;
 }
 */
-#daily_btn, #weekly_btn, #monthly_btn{
-    justify-content: left;
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#daily_btn, #weekly_btn, #monthly_btn {
     margin-top: 15px;
     margin-left: 10px;
     background-color: transparent;
     border: none;
-    color:#246dec;
+    color: #246dec;
 }
+
+#lnr_btn, #bar_btn {
+    margin-top: 15px;
+    margin-right: 10px;
+    background-color: transparent;
+    border: none;
+    color: #246dec;
+}
+
+/*media quires*/
+@media screen and (max-width: 992px){
+  .grid-container{
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.2fr 3fr;
+    grid-template-areas: 
+    "header"
+    "main";
+  }  
+  #sidebar{
+    display: none;
+    z-index: 99 !important; 
+  }
+  .menu-icon {
+    display:inline;
+    cursor: pointer;
+  }
+  .sidebar-title >span{
+    display: inline;
+  }
+  #close_btn{
+    cursor: pointer;
+margin-top: -30px;
+margin-left: px;
+}
+}
+

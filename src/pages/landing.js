@@ -27,7 +27,7 @@ class Landing extends React.Component {
                                 <a href="/" class="navbar__links">About</a>
                             </li>
                             <li class="navbar__btn">
-                                <Link to="/login" class="button"> Sign Up </Link>
+                                <Link to="/MainDashboard" class="button"> Sign Up </Link>
                             </li>
                         </ul>
                     </div>

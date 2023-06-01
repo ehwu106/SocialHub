@@ -5,6 +5,7 @@ import Landing from "./pages/landing"
 import Login from "./pages/login"
 import Youtube from "./pages/youtube"
 import MainDashboard from "./pages/dashboard"
+import Facebook from './pages/facebook'
 
 import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
 
@@ -16,6 +17,7 @@ function App() {
         <Route exact path="/login" Component={Login}></Route>
         <Route exact path="/dashboard_yt" Component={Youtube}></Route>
         <Route exact path="/MainDashboard" Component={MainDashboard}></Route>
+        <Route exact path="/dashboard_fb" Component={Facebook}></Route>
       </Routes>
     </Router>
   </div>
