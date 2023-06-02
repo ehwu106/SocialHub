@@ -205,7 +205,7 @@ const Youtube = (props) => {
           console.error('Error retrieving access token:', tokenResponse.error);
         } else {
           access_token = tokenResponse.access_token;
-          expiresIn = tokenResponse.expires_in;
+          const expiresIn = tokenResponse.expires_in;
           const now = new Date();
           const expirationDate = new Date(now.getTime() + expiresIn * 1000);
           console.log('Access token retrieved successfully:', access_token);
