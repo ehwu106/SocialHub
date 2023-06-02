@@ -128,78 +128,206 @@ const Youtube = (props) => {
         areaChart.render();
       }
 
-      // renderBarChart(selector, data, categories)
-      // renderAreaChart(selector, seriesData, labels)
-      renderBarChart(
-        "#bar-chart",
-        [10200, 2500, 7000],
-        ['YouTube', 'Facebook', 'Twitter']
-      );
+      /////////////////////// YOUTUBE API/////////////////////////////////////
+      async function populateDataMap(startDate, endDate, dimensions, maxResults) {
+        const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
+        const params = new URLSearchParams({
+          'ids': 'channel==MINE',
+          'startDate': startDate,
+          'endDate': endDate,
+          'metrics': 'views,likes,subscribersGained',
+          'dimensions': dimensions,
+          'maxResults': maxResults,
+          'access_token': access_token
+        });
 
-      renderBarChart(
-        "#bar-chart2",
-        [700000, 250000, 809900],
-        ['YouTube', 'Facebook', 'Twitter']
-      );
+        // Send the GET request using fetch()
+        try {
+          const response = await fetch(`${url}?${params}`);
+          const data = await response.json();
 
-      renderAreaChart(
-        "#area-chart",
-        [{
-          name: 'YouTube',
-          data: [44, 50, 30, 20, 79, 100, 50]
-        },
-        {
-          name: 'Facebook',
-          data: [55, 69, 45, 61, 43, 54, 120]
-        },
-        {
-          name: 'Twitter',
-          data: [30, 45, 45, 134, 77, 54, 111]
-        }],
-        ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"]
-      );
+          const dataMap = new Map();
+          let currentDate = new Date(startDate);
+          currentDate.setDate(currentDate.getDate() + 1); //Skip one day because it starts from the day before so it will always be 0
+          let currentEndDate = new Date(endDate)
 
-      renderBarChart(
-        "#bar-chart3",
-        [10200, 2500, 7000, 2340, 5550, 11111, 4567, 10200, 2500, 7000, 2340, 5550],
-        ['week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7', 'week8', 'week9', 'week10', 'week11', 'week12']
-      );
+          while (currentDate <= currentEndDate) {
+            let dateKey;
 
-      renderBarChart(
-        "#bar-chart4",
-        [10200, 92500, 27000, 24340, 56550, 31111, 45667, 81000, 52500, 47000, 25340, 55560],
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-      );
+            if (dimensions === 'day') {
+              dateKey = currentDate.toISOString().split("T")[0];
+              currentDate.setDate(currentDate.getDate() + 1);
+            } else if (dimensions === 'month') {
+              dateKey = getMonthKey(currentDate);
+              currentDate.setMonth(currentDate.getMonth() + 1);
+            }
 
-      renderBarChart(
-        "#bar-chart5",
-        [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69],
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
-      );
+            dataMap.set(dateKey, [0, 0, 0]);
+          }
 
+          data.rows.forEach(row => {
+          const date = row[0];
+          const views = row[1];
+          const likes = row[2];
+          const subs = row[3];
+          const value = [views, likes, subs]
+          if (dimensions === 'day') {
+              dataMap.set(date, value);
+          } else if (dimensions === 'month') {
+              const monthKey = getMonthKey(new Date(date));
+              dataMap.set(monthKey, value);
+          }
+          });
+
+          const viewsArray = Array.from(dataMap.values()).map(([firstValue]) => firstValue);
+          const likesArray = Array.from(dataMap.values()).map(([_, secondValue]) => secondValue);
+          const subsArray = Array.from(dataMap.values()).map(([_, x, thirdValue]) => thirdValue);
+
+          return [viewsArray, likesArray, subsArray]
+
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      function getMonthKey(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        return `${year}-${String(month).padStart(2, '0')}`;
+      }
+
+      var client;
+      var access_token;
+
+      function handleTokenResponse(tokenResponse) {
+        console.log('Authenication Successful');
+        if (tokenResponse.error) {
+          console.error('Error retrieving access token:', tokenResponse.error);
+        } else {
+          access_token = tokenResponse.access_token;
+          expiresIn = tokenResponse.expires_in;
+          const now = new Date();
+          const expirationDate = new Date(now.getTime() + expiresIn * 1000);
+          console.log('Access token retrieved successfully:', access_token);
+          document.cookie = `yt_access_token=${access_token}; expires=${expirationDate.toUTCString()}; SameSite=Lax;`;
+        }
+      }
+
+      function getTokenFromCookie() {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.startsWith('yt_access_token=')) {
+            return cookie.substring('yt_access_token='.length);
+          }
+        }
+        return null;
+      }
+
+      function revokeToken() {
+        document.cookie = 'yt_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+        google.accounts.oauth2.revoke(access_token, () => {
+          console.log('Access token revoked');
+          access_token = null; // Reset the access token
+        });
+      }
+
+      function initClient() {
+        const storedToken = getTokenFromCookie();
+        if (storedToken) {
+          access_token = storedToken;
+          console.log('Access token retrieved from cookie:', access_token);
+        } else {
+          // If access_token doesn't exist, proceed with authentication
+          console.log('Starting Authentication');
+          client = google.accounts.oauth2.initTokenClient({
+            apiKey: 'AIzaSyDN1y_pZl2KmGJin-xot9a8daOdhbPcaTk',
+            client_id: '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com',
+            scope: 'https://www.googleapis.com/auth/yt-analytics.readonly',
+            callback: handleTokenResponse,
+          });
+          client.requestAccessToken().catch(error => console.error('Error requesting access token:', error));
+        }
+
+      }
+
+      function loadGoogleAPI() {
+        console.log('Loading Google API');
+        const loadClientScript = new Promise((resolve, reject) => {
+          const scriptClient = document.createElement('script');
+          scriptClient.src = 'https://apis.google.com/js/client.js';
+          scriptClient.onload = resolve;
+          scriptClient.onerror = reject;
+          document.head.appendChild(scriptClient);
+        });
+
+        const loadGSIScript = new Promise((resolve, reject) => {
+          const scriptGSI = document.createElement('script');
+          scriptGSI.src = 'https://accounts.google.com/gsi/client';
+          scriptGSI.onload = resolve;
+          scriptGSI.onerror = reject;
+          document.head.appendChild(scriptGSI);
+        });
+
+        Promise.all([loadClientScript, loadGSIScript])
+        .then(() => {
+        // Both scripts have been successfully loaded
+        console.log("Scripts loaded and initializing client");
+        initClient();
+        })
+        .catch((error) => {
+        // An error occurred while loading one or both scripts
+        console.error('Error loading Google API:', error);
+        });
+      }
+
+      loadGoogleAPI();
+
+      const today = new Date();
+      const currentYear = today.getFullYear();
+      const currentWeek = Math.ceil(today.getDate() / 7);
+      const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
+
+      const [weeklyVW, weeklyLikes, weeklyFL] = populateDataMap(
+        `${currentYear}-${currentMonth}-${String(((currentWeek - 1) * 7 + 1)).padStart(2, '0')}`,
+        `${currentYear}-${currentMonth}-${String((currentWeek * 7)).padStart(2, '0')}`,
+        'day',
+        '7'
+      )
+      const [monthlyVW, monthlyLikes, monthlyFL] = populateDataMap(
+        `${currentYear}-${currentMonth}-31`,
+        `${currentYear}-${currentMonth}-31`,
+        'month',
+        '12'
+      )
+      const [yearlyVW, yearlyLikes, yearlyFL] = populateDataMap(
+        `${currentYear - 1}-12-31`,
+        `${currentYear}-12-31`,
+        'month',
+        '12'
+      )
+      /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
       renderBarChart(
         "#weekChart_fl",
-        [1200, 2500, 778, 2340, 4000, 1700, 2100],
+        weeklyFL,
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       );
 
       renderBarChart(
         "#weekChart_vw",
-        [2000, 5000, 3000, 2500, 4000, 1700, 2100],
+        weeklyVW,
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       );
 
       renderBarChart(
         "#weekChart_likes",
-        [2000, 5000, 3000, 2500, 4000, 1700, 2100],
+        weeklyLikes,
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       );
 
       renderBarChart(
         "#monthChart_fl",
-        [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69],
+        monthlyFL,
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
           '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
           '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
@@ -207,7 +335,7 @@ const Youtube = (props) => {
 
       renderBarChart(
         "#monthChart_vw",
-        [59, 47, 111, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69],
+        monthlyVW,
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
           '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
           '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
@@ -215,7 +343,7 @@ const Youtube = (props) => {
 
       renderBarChart(
         "#monthChart_likes",
-        [200, 47, 111, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69],
+        monthlyLikes,
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
           '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
           '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
@@ -223,19 +351,19 @@ const Youtube = (props) => {
 
       renderBarChart(
         "#yearChart_fl",
-        [10200, 92500, 27000, 24340, 56550, 31111, 45667, 81000, 52500, 47000, 25340, 55560],
+        yearlyFL,
         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       );
 
       renderBarChart(
         "#yearChart_vw",
-        [10200, 92500, 27000, 24340, 56550, 31111, 45667, 81000, 52500, 47000, 25340, 557560],
+        yearlyVW,
         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       );
 
       renderBarChart(
         "#yearChart_likes",
-        [10200, 92500, 27000, 24340, 96550, 31111, 453667, 81000, 52500, 47000, 25340, 557560],
+        yearlyLikes,
         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       );
   
@@ -244,7 +372,7 @@ const Youtube = (props) => {
         "#monthChart_fl_linear",
         [{
           name: 'YouTube',
-          data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+          data: monthlyFL
         }],
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
           '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
@@ -255,7 +383,7 @@ const Youtube = (props) => {
         "#monthChart_vw_linear",
         [{
           name: 'YouTube',
-          data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+          data: monthlyVW
         }],
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
           '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
@@ -266,7 +394,7 @@ const Youtube = (props) => {
         "#monthChart_likes_linear",
         [{
           name: 'YouTube',
-          data: [59, 47, 34, 62, 74, 41, 28, 51, 66, 22, 55, 78, 37, 72, 23, 68, 26, 44, 31, 57, 79, 25, 43, 64, 53, 36, 21, 48, 76, 30, 69]
+          data: monthlyLikes
         }],
         ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
           '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
@@ -277,7 +405,7 @@ const Youtube = (props) => {
         "#yearChart_likes_linear",
         [{
           name: 'YouTube',
-          data: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]
+          data: yearlyLikes
         }],
         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       );
@@ -286,7 +414,7 @@ const Youtube = (props) => {
         "#yearChart_vw_linear",
         [{
           name: 'YouTube',
-          data: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]
+          data: yearlyVW
         }],
         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       );
@@ -295,7 +423,7 @@ const Youtube = (props) => {
         "#yearChart_fl_linear",
         [{
           name: 'YouTube',
-          data: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000]
+          data: yearlyFL
         }],
         ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
       );
@@ -304,7 +432,7 @@ const Youtube = (props) => {
         "#weekChart_fl_linear",
         [{
           name: 'YouTube',
-          data: [1000, 2000, 3000, 4000, 5000, 6000, 7000]
+          data: weeklyFL
         }],
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       );
@@ -313,7 +441,7 @@ const Youtube = (props) => {
         "#weekChart_vw_linear",
         [{
           name: 'YouTube',
-          data: [1000, 2000, 3000, 4000, 5000, 6000, 7000]
+          data: weeklyVW
         }],
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       );
@@ -322,7 +450,7 @@ const Youtube = (props) => {
         "#weekChart_likes_linear",
         [{
           name: 'YouTube',
-          data: [1000, 2000, 3000, 4000, 5000, 6000, 7000]
+          data: weeklyLikes
         }],
         ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
       );
