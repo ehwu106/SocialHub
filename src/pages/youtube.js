@@ -34,13 +34,6 @@ function genAuthUrl(){
   return authUrl;
 }
 
-const redirectLogin = () => {
-  useEffect(() => {
-    // Perform the redirect after the component mounts
-    window.location.href = genAuthUrl();
-  }, []);
-}
-
 // Handle the authorization code
 const handleAuthorizationCode = async (code) => {
   try {
@@ -75,7 +68,10 @@ export const Oauth = () => {
 };
 
 const Youtube = (props) => {
-    redirectLogin();
+    useEffect(() => {
+      // Perform the redirect after the component mounts
+      window.location.href = genAuthUrl();
+    }, []);
     const fbstate = useState(null);
     const [userState, setUserState] = useState(null);
     var sidebarOpen = false;
