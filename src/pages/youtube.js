@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import "./dashboard.css";
 import ApexCharts from 'apexcharts';
@@ -12,13 +10,13 @@ const {google} = require('googleapis');
 // Set the required parameters
 const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
-var access_token;
+var access_token = NULL;
 
 function genAuthUrl(){
   // Set the required parameters
   const clientId = CLIENT_ID;
   const clientSecret = CLIENT_SECRET;
-  const redirectUri = 'https://localhost:3000';
+  const redirectUri = 'https://localhost:3000/dashboard_yt/oauth';
   const scope = 'https://www.googleapis.com/auth/yt-analytics.readonly';
 
   // Create OAuth2 client
@@ -35,10 +33,12 @@ function genAuthUrl(){
   return authUrl;
 }
 
-useEffect(() => {
-  // Perform the redirect after the component mounts
-  window.location.href = genAuthUrl();
-}, []);
+function redirectLogin() {
+  useEffect(() => {
+    // Perform the redirect after the component mounts
+    window.location.href = genAuthUrl();
+  }, []);
+}
 
 // Handle the authorization code
 const handleAuthorizationCode = async (code) => {
@@ -58,24 +58,23 @@ const handleAuthorizationCode = async (code) => {
   }
 };
 
-const handleRequest = (req, res) => {
-  if (req.url.startsWith('/')) {
-    const url = new URL(`https://${req.headers.host}${req.url}`);
-    const code = url.searchParams.get('code');
-    console.log('Authorization code:', code);
-    
-    if (code) {
-      handleAuthorizationCode(code);
-    }
-  }
-};
+export const Oauth = () => {
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get('code');
 
-export const ytModule = (server) => {
-  console.log('module');
-  server.on('request', handleRequest);
+    // Use the code and scope values for further processing
+    handleAuthorizationCode(code);
+
+    // Redirect to /dashboard_yt
+    window.location.href = '/dashboard_yt';
+  }, []);
+
+  return null;
 };
 
 const Youtube = (props) => {
+    redirectLogin();
     const fbstate = useState(null);
     const [userState, setUserState] = useState(null);
     var sidebarOpen = false;
