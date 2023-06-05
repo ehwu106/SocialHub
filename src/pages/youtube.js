@@ -108,93 +108,6 @@ const Youtube = (props) => {
 
       ///////////////////END//////////////////////
 
-      ///////////////////CHARTS////////////////////
-
-      function renderBarChart(selector, data, categories) {
-        var barChartOptions = {
-          series: [{
-            data: data
-          }],
-          chart: {
-            type: 'bar',
-            height: 350,
-            toolbar: {
-              show: false
-            }
-          },
-          colors: [
-            "#cc3c43",
-            "#367952",
-            "#f5b74f"
-          ],
-          plotOptions: {
-            bar: {
-              distributed: true,
-              borderRadius: 4,
-              horizontal: false,
-              columnWidth: '40%'
-            }
-          },
-          dataLabels: {
-            enabled: false
-          },
-          legend: {
-            show: false
-          },
-          xaxis: {
-            categories: categories
-          },
-          yaxis: {
-            title: {
-              text: "Count"
-            }
-          }
-        };
-
-        var barChart = new ApexCharts(document.querySelector(selector), barChartOptions);
-        barChart.render();
-      }
-
-      function renderAreaChart(selector, seriesData, labels) {
-        var areaChartOptions = {
-          series: seriesData,
-          chart: {
-            height: 350,
-            type: 'area',
-            toolbar: {
-              show: false
-            }
-          },
-          colors: [
-            "#cc3c43",
-            "#367952",
-            "#f5b74f"
-          ],
-          dataLabels: {
-            enabled: false
-          },
-          stroke: {
-            curve: 'smooth'
-          },
-          labels: labels,
-          markers: {
-            size: 0
-          },
-          yaxis: [{
-            title: {
-              text: 'Followers per month'
-            }
-          }],
-          tooltip: {
-            shared: true,
-            intersect: false
-          }
-        };
-
-        var areaChart = new ApexCharts(document.querySelector(selector), areaChartOptions);
-        areaChart.render();
-      }
-
       /////////////////////// YOUTUBE API/////////////////////////////////////
       async function populateDataMap(startDate, endDate, dimensions, maxResults) {
         const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
@@ -286,65 +199,152 @@ const Youtube = (props) => {
         'month',
         '12'
       )
+
+      ///////////////////CHARTS////////////////////
+
+      function renderBarChart(selector, data, categories) {
+        var barChartOptions = {
+          series: [{
+            data: data
+          }],
+          chart: {
+            type: 'bar',
+            height: 350,
+            toolbar: {
+              show: false
+            }
+          },
+          colors: [
+            "#cc3c43",
+            "#367952",
+            "#f5b74f"
+          ],
+          plotOptions: {
+            bar: {
+              distributed: true,
+              borderRadius: 4,
+              horizontal: false,
+              columnWidth: '40%'
+            }
+          },
+          dataLabels: {
+            enabled: false
+          },
+          legend: {
+            show: false
+          },
+          xaxis: {
+            categories: categories
+          },
+          yaxis: {
+            title: {
+              text: "Count"
+            }
+          }
+        };
+
+        var barChart = new ApexCharts(document.querySelector(selector), barChartOptions);
+        barChart.render();
+      }
+
+      function renderAreaChart(selector, seriesData, labels) {
+        var areaChartOptions = {
+          series: seriesData,
+          chart: {
+            height: 350,
+            type: 'area',
+            toolbar: {
+              show: false
+            }
+          },
+          colors: [
+            "#cc3c43",
+            "#367952",
+            "#f5b74f"
+          ],
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            curve: 'smooth'
+          },
+          labels: labels,
+          markers: {
+            size: 0
+          },
+          yaxis: [{
+            title: {
+              text: 'Followers per month'
+            }
+          }],
+          tooltip: {
+            shared: true,
+            intersect: false
+          }
+        };
+
+        var areaChart = new ApexCharts(document.querySelector(selector), areaChartOptions);
+        areaChart.render();
+      }
+      
+      const weeklyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const monthlyLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+      '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+      const yearlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
       renderBarChart(
         "#weekChart_fl",
         weeklyFL,
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weeklyLabels
       );
 
       renderBarChart(
         "#weekChart_vw",
         weeklyVW,
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weeklyLabels
       );
 
       renderBarChart(
         "#weekChart_likes",
         weeklyLikes,
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weeklyLabels
       );
 
       renderBarChart(
         "#monthChart_fl",
         monthlyFL,
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+        monthlyLabels
       );
 
       renderBarChart(
         "#monthChart_vw",
         monthlyVW,
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+        monthlyLabels
       );
 
       renderBarChart(
         "#monthChart_likes",
         monthlyLikes,
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+        monthlyLabels
       );
 
       renderBarChart(
         "#yearChart_fl",
         yearlyFL,
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        yearlyLabels
       );
 
       renderBarChart(
         "#yearChart_vw",
         yearlyVW,
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        yearlyLabels
       );
 
       renderBarChart(
         "#yearChart_likes",
         yearlyLikes,
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        yearlyLabels
       );
   
       //// AREA GRAPHS
@@ -354,9 +354,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: monthlyFL
         }],
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+        monthlyLabels
       );
 
       renderAreaChart(
@@ -365,9 +363,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: monthlyVW
         }],
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+        monthlyLabels
       );
 
       renderAreaChart(
@@ -376,9 +372,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: monthlyLikes
         }],
-        ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-          '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-          '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31']
+        monthlyLabels
       );
 
       renderAreaChart(
@@ -387,7 +381,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: yearlyLikes
         }],
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        yearlyLabels
       );
 
       renderAreaChart(
@@ -396,7 +390,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: yearlyVW
         }],
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        yearlyLabels
       );
 
       renderAreaChart(
@@ -405,7 +399,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: yearlyFL
         }],
-        ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+        yearlyLabels
       );
 
       renderAreaChart(
@@ -414,7 +408,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: weeklyFL
         }],
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weeklyLabels
       );
 
       renderAreaChart(
@@ -423,7 +417,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: weeklyVW
         }],
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weeklyLabels
       );
 
       renderAreaChart(
@@ -432,7 +426,7 @@ const Youtube = (props) => {
           name: 'YouTube',
           data: weeklyLikes
         }],
-        ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        weeklyLabels
       );
       ///////////////////END/////////////////////
   
