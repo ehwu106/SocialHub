@@ -67,7 +67,7 @@ export const Oauth = () => {
   return null;
 };
 
-const Youtube = (props) => {
+export const Youtube = (props) => {
     useEffect(() => {
       // Perform the redirect after the component mounts
       window.location.href = genAuthUrl();
@@ -796,5 +796,3 @@ const Youtube = (props) => {
     </div>
     );
 }
-
-export default Youtube;
