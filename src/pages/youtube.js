@@ -10,7 +10,8 @@ const {google} = require('googleapis');
 // Set the required parameters
 const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
-var access_token = NULL;
+var access_token = null;
+var oauth2Client= null;
 
 function genAuthUrl(){
   // Set the required parameters
@@ -20,7 +21,7 @@ function genAuthUrl(){
   const scope = 'https://www.googleapis.com/auth/yt-analytics.readonly';
 
   // Create OAuth2 client
-  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+  oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
 
   // Generate the authentication URL
   const authUrl = oauth2Client.generateAuthUrl({
@@ -33,7 +34,7 @@ function genAuthUrl(){
   return authUrl;
 }
 
-function redirectLogin() {
+const redirectLogin = () => {
   useEffect(() => {
     // Perform the redirect after the component mounts
     window.location.href = genAuthUrl();
