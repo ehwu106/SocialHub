@@ -7,6 +7,74 @@ import AppLayout from './applayout';
 import {NavLink, Link} from "react-router-dom";
 import SignOutButton from './signoutbutton';
 
+const {google} = require('googleapis');
+
+// Set the required parameters
+const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
+const CLIENT_SECRET = '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';
+var access_token;
+
+function genAuthUrl(){
+  // Set the required parameters
+  const clientId = CLIENT_ID;
+  const clientSecret = CLIENT_SECRET;
+  const redirectUri = 'https://localhost:3000';
+  const scope = 'https://www.googleapis.com/auth/yt-analytics.readonly';
+
+  // Create OAuth2 client
+  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+
+  // Generate the authentication URL
+  const authUrl = oauth2Client.generateAuthUrl({
+    access_type: 'offline',
+    scope: scope,
+  });
+
+  // Print the authentication URL
+  console.log('Authorization URL:', authUrl);
+  return authUrl;
+}
+
+useEffect(() => {
+  // Perform the redirect after the component mounts
+  window.location.href = genAuthUrl();
+}, []);
+
+// Handle the authorization code
+const handleAuthorizationCode = async (code) => {
+  try {
+    // Exchange the authorization code for tokens
+    const { tokens } = await oauth2Client.getToken(code);
+
+    // Set the tokens on the client
+    oauth2Client.setCredentials(tokens);
+    console.log('Access tokens:', tokens);
+    access_token = tokens.access_token;
+
+    // Use the tokens to make API requests
+    // ...
+  } catch (error) {
+    console.error('Error retrieving access token:', error);
+  }
+};
+
+const handleRequest = (req, res) => {
+  if (req.url.startsWith('/')) {
+    const url = new URL(`https://${req.headers.host}${req.url}`);
+    const code = url.searchParams.get('code');
+    console.log('Authorization code:', code);
+    
+    if (code) {
+      handleAuthorizationCode(code);
+    }
+  }
+};
+
+export const ytModule = (server) => {
+  console.log('module');
+  server.on('request', handleRequest);
+};
+
 const Youtube = (props) => {
     const fbstate = useState(null);
     const [userState, setUserState] = useState(null);
@@ -196,93 +264,6 @@ const Youtube = (props) => {
         return `${year}-${String(month).padStart(2, '0')}`;
       }
 
-      var client;
-      var access_token;
-
-      function handleTokenResponse(tokenResponse) {
-        console.log('Authenication Successful');
-        if (tokenResponse.error) {
-          console.error('Error retrieving access token:', tokenResponse.error);
-        } else {
-          access_token = tokenResponse.access_token;
-          const expiresIn = tokenResponse.expires_in;
-          const now = new Date();
-          const expirationDate = new Date(now.getTime() + expiresIn * 1000);
-          console.log('Access token retrieved successfully:', access_token);
-          document.cookie = `yt_access_token=${access_token}; expires=${expirationDate.toUTCString()}; SameSite=Lax;`;
-        }
-      }
-
-      function getTokenFromCookie() {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.startsWith('yt_access_token=')) {
-            return cookie.substring('yt_access_token='.length);
-          }
-        }
-        return null;
-      }
-
-      function revokeToken() {
-        document.cookie = 'yt_access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-        google.accounts.oauth2.revoke(access_token, () => {
-          console.log('Access token revoked');
-          access_token = null; // Reset the access token
-        });
-      }
-
-      function initClient() {
-        const storedToken = getTokenFromCookie();
-        if (storedToken) {
-          access_token = storedToken;
-          console.log('Access token retrieved from cookie:', access_token);
-        } else {
-          // If access_token doesn't exist, proceed with authentication
-          console.log('Starting Authentication');
-          client = google.accounts.oauth2.initTokenClient({
-            apiKey: 'AIzaSyDN1y_pZl2KmGJin-xot9a8daOdhbPcaTk',
-            client_id: '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com',
-            scope: 'https://www.googleapis.com/auth/yt-analytics.readonly',
-            callback: handleTokenResponse,
-          });
-          client.requestAccessToken().catch(error => console.error('Error requesting access token:', error));
-        }
-
-      }
-
-      function loadGoogleAPI() {
-        console.log('Loading Google API');
-        const loadClientScript = new Promise((resolve, reject) => {
-          const scriptClient = document.createElement('script');
-          scriptClient.src = 'https://apis.google.com/js/client.js';
-          scriptClient.onload = resolve;
-          scriptClient.onerror = reject;
-          document.head.appendChild(scriptClient);
-        });
-
-        const loadGSIScript = new Promise((resolve, reject) => {
-          const scriptGSI = document.createElement('script');
-          scriptGSI.src = 'https://accounts.google.com/gsi/client';
-          scriptGSI.onload = resolve;
-          scriptGSI.onerror = reject;
-          document.head.appendChild(scriptGSI);
-        });
-
-        Promise.all([loadClientScript, loadGSIScript])
-        .then(() => {
-        // Both scripts have been successfully loaded
-        console.log("Scripts loaded and initializing client");
-        initClient();
-        })
-        .catch((error) => {
-        // An error occurred while loading one or both scripts
-        console.error('Error loading Google API:', error);
-        });
-      }
-
-      loadGoogleAPI();
-
       const today = new Date();
       const currentYear = today.getFullYear();
       const currentWeek = Math.ceil(today.getDate() / 7);
@@ -467,8 +448,6 @@ const Youtube = (props) => {
         element1.style.display = 'grid';
         element2.style.display = 'none';
         element3.style.display = 'inline';
-  
-  
   
       });
   
