@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import './styles.css';
 //import runScriptJS from './script.js';
-import ApexCharts from 'apexcharts'
+import ApexCharts from 'apexcharts';
+
 const MainDashboard = (props) => {
   const fbstate = useState(null);
   const [userState, setUserState] = useState(null);
@@ -819,17 +820,19 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
   // runs on component mount
   useEffect(() => {
     //runScriptJS();
-    fbInit();
+    //fbInit();
   }, []);
 
   useEffect(() => {
     //var weekChart_fl = new ApexCharts(document.querySelector("#weekChart_fl"), weekOptions_fls);
     //weekChart_fl.render();
   }, [weekOptions_fls])
-  useEffect(() => {
+  /*useEffect(() => {
+    if (userToken) {
     const ids = fbGetPages();
+    }
     //countFbFollowers(ids);
-  }, [userToken])
+  }, [userToken])*/
   function fbInit() {
     window.fbAsyncInit = () => {
       window.FB.init({
@@ -1058,56 +1061,6 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
       </main>}
       {userToken &&
       <div className="grid-container">
-        <header className="header">
-          <div className="menu-icon" onclick="openSidebar()">
-            <span className="material-icons-outlined">menu</span>
-          </div>
-          <div className="header-left">
-            <span className="material-icons-outlined">search</span>
-          </div>
-          <div className="header-right">
-            <span className="material-icons-outlined">settings</span>
-            <span className="material-icons-outlined">account_circle</span>
-          </div>
-        </header>
-        <aside id="sidebar">
-          <div className="sidebar-title">
-            <div className="sidebar-brand">
-              <span className="material-icons-outlined">dashboard</span>SocialHub
-            </div>
-            <span className="material-icons-outlined" onclick="closeSidebar()">close</span>
-          </div>
-
-          <ul className="sidebar-list">
-
-            <a href="index.html">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">home</span>Dashboard
-              </li>
-            </a>
-
-            <a href="yt_dashboard.html">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                YouTube
-              </li>
-            </a>
-
-            <a href="https://www.example.com">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                Facebook
-              </li>
-            </a>
-
-            <a href="https://www.example.com">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                Twitter
-              </li>
-            </a>
-          </ul>
-        </aside>
         <main className="main-container">
           <div className="main-title">
             <p className="font-weight-bold">FACEBOOK</p>
