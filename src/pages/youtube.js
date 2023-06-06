@@ -2,76 +2,103 @@ import React, { useState, useEffect } from 'react';
 import "./dashboard.css";
 import ApexCharts from 'apexcharts';
 import AppLayout from './applayout';
-import {NavLink, Link} from "react-router-dom";
+import {useLocation , Link} from "react-router-dom";
 import SignOutButton from './signoutbutton';
 
-const {google} = require('googleapis');
-
-// Set the required parameters
-const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
-const CLIENT_SECRET = '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';
-var access_token = null;
-var oauth2Client= null;
-
-function genAuthUrl(){
+const Youtube = (props) => {
   // Set the required parameters
-  const clientId = CLIENT_ID;
-  const clientSecret = CLIENT_SECRET;
+  const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
+  const CLIENT_SECRET = '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';
   const redirectUri = 'https://localhost:3000/dashboard_yt/oauth';
-  const scope = 'https://www.googleapis.com/auth/yt-analytics.readonly';
+  const [access_token, setAccessToken] = useState(null);
 
-  // Create OAuth2 client
-  oauth2Client = new google.auth.OAuth2(clientId, clientSecret, redirectUri);
+  function genAuthUrl(){
+    // Set the required parameters
+    const clientId = CLIENT_ID;
+    const scope = 'https://www.googleapis.com/auth/yt-analytics.readonly';
 
-  // Generate the authentication URL
-  const authUrl = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: scope,
-  });
+    // Create OAuth2 client
+    const oauth2URI = 'https://accounts.google.com/o/oauth2/v2/auth'
 
-  // Print the authentication URL
-  console.log('Authorization URL:', authUrl);
-  return authUrl;
-}
+    const authUrl = `${oauth2URI}?client_id=${clientId}&scope=${scope}&access_type=offline&include_granted_scopes=true&response_type=code&state=state_parameter_passthrough_value&redirect_uri=${redirectUri}`
 
-// Handle the authorization code
-const handleAuthorizationCode = async (code) => {
-  try {
-    // Exchange the authorization code for tokens
-    const { tokens } = await oauth2Client.getToken(code);
-
-    // Set the tokens on the client
-    oauth2Client.setCredentials(tokens);
-    console.log('Access tokens:', tokens);
-    access_token = tokens.access_token;
-
-    // Use the tokens to make API requests
-    // ...
-  } catch (error) {
-    console.error('Error retrieving access token:', error);
+    // Print the authentication URL
+    console.log('Authorization URL:', authUrl);
+    return authUrl;
   }
-};
 
-export const Oauth = () => {
-  useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get('code');
+  // Handle the authorization code
+  const handleAuthorizationCode = async (code) => {
+    try {
+      // Exchange the authorization code for tokens
+      const oauth2Token = 'https://oauth2.googleapis.com/token';
+      const tokenParams = new URLSearchParams({
+        'code': code,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'redirect_uri': redirectUri,
+        'grant_type': 'authorization_code'
+      });
+      
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: tokenParams.toString(),
+      };
+    
+      const response = await fetch(oauth2Token, options);
+      const tokens = await response.json();
+      // Handle the tokens response as needed
+      setAccessToken(tokens.access_token);
+      console.log(tokens);
+      console.log(access_token);
 
-    // Use the code and scope values for further processing
-    handleAuthorizationCode(code);
+    } catch (error) {
+      console.error('Error retrieving access token:', error);
+    }
+  };
 
-    // Redirect to /dashboard_yt
-    window.location.href = '/dashboard_yt';
-  }, []);
 
-  return null;
-};
+  const Oauth = () => {
+    console.log("Getting auth code");
+    useEffect(() => {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get('code');
 
-export const Youtube = (props) => {
+      const handleAuth = async () => {
+        // Use the code and scope values for further processing
+        await handleAuthorizationCode(code);
+
+        //window.location.href = '/dashboard_yt';
+      };
+      // Call the async function
+      handleAuth()
+    }, []);
+
+    return null;
+  };
+
+  const location = useLocation();
+
+  // Access the current pathname from the `location` object
+  const currentPath = location.pathname;
+
+  // Perform conditional logic based on the current pathname
+  if (currentPath === '/dashboard_yt/oauth') {
+    Oauth();
+  }
+
+  function GoogleLogin() {
     useEffect(() => {
       // Perform the redirect after the component mounts
       window.location.href = genAuthUrl();
     }, []);
+  
+    return null; // or any JSX you want to render
+  }
+
     const fbstate = useState(null);
     const [userState, setUserState] = useState(null);
     var sidebarOpen = false;
@@ -90,9 +117,6 @@ export const Youtube = (props) => {
         }
     }
     useEffect(() => {
-
-   
-
       if (userState) {
         openSidebar();
       } else {
@@ -106,7 +130,7 @@ export const Youtube = (props) => {
       ///////////////////END//////////////////////
 
       /////////////////////// YOUTUBE API/////////////////////////////////////
-      async function populateDataMap(startDate, endDate, dimensions, maxResults) {
+      async function populateDataMap(startDate, endDate, dimensions, maxResults, accessToken) {
         const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
         const params = new URLSearchParams({
           'ids': 'channel==MINE',
@@ -115,7 +139,7 @@ export const Youtube = (props) => {
           'metrics': 'views,likes,subscribersGained',
           'dimensions': dimensions,
           'maxResults': maxResults,
-          'access_token': access_token
+          'access_token': accessToken
         });
 
         // Send the GET request using fetch()
@@ -182,19 +206,22 @@ export const Youtube = (props) => {
         `${currentYear}-${currentMonth}-${String(((currentWeek - 1) * 7 + 1)).padStart(2, '0')}`,
         `${currentYear}-${currentMonth}-${String((currentWeek * 7)).padStart(2, '0')}`,
         'day',
-        '7'
+        '7',
+        access_token
       )
       const [monthlyVW, monthlyLikes, monthlyFL] = populateDataMap(
         `${currentYear}-${currentMonth}-31`,
         `${currentYear}-${currentMonth}-31`,
         'month',
-        '12'
+        '12',
+        access_token
       )
       const [yearlyVW, yearlyLikes, yearlyFL] = populateDataMap(
         `${currentYear - 1}-12-31`,
         `${currentYear}-12-31`,
         'month',
-        '12'
+        '12',
+        access_token
       )
 
       ///////////////////CHARTS////////////////////
@@ -532,7 +559,22 @@ export const Youtube = (props) => {
     }, [userState]);
 
     return (
-      <div className="grid-container">
+      <div>
+      {!access_token &&
+      <main className="main-container auth-card">
+        <div className="main-cards">
+          <div className="card">
+            <div className="card-inner">
+              <span className="text-blue ">Authorize with at least one social media to see metrics.</span>
+
+              <button onClick={GoogleLogin}>Login with Facebook</button>
+
+              <button onClick={() => {alert("integrate together later")}}>Login with YouTube</button>
+            </div>
+          </div>
+        </div>
+      </main>}
+      {access_token && <div className="grid-container">
       {/* Header */}
       <header className="header">
         <div className="menu-icon" onClick={openSidebar}>
@@ -793,6 +835,10 @@ export const Youtube = (props) => {
         </div>
       </main>
       {/*Main end*/}
-    </div>
+      </div>}
+      </div>
     );
+    
 }
+
+export default Youtube
