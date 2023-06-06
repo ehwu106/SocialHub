@@ -3,7 +3,7 @@ import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 import Landing from "./pages/landing"
 import Login from "./pages/login"
-import { Youtube, Oauth } from "./pages/youtube"
+import Youtube from "./pages/youtube"
 import MainDashboard from "./pages/dashboard"
 import Facebook from './pages/facebook'
 
@@ -18,7 +18,7 @@ function App() {
         <Route exact path="/dashboard_yt" Component={Youtube}></Route>
         <Route exact path="/MainDashboard" Component={MainDashboard}></Route>
         <Route exact path="/dashboard_fb" Component={Facebook}></Route>
-        <Route exact path="/dashboard_yt/oauth" Component={Oauth}></Route>
+        <Route exact path="/dashboard_yt/oauth" Component={Youtube}></Route>
       </Routes>
     </Router>
   </div>
