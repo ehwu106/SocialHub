@@ -38,7 +38,7 @@ class Landing extends React.Component {
                             <h1>ORGANIZED ANALYTICS</h1>
                             <h2>MADE EASY</h2>
                             <p>Try it yourself</p>
-                            <button className="main__btn"><a href="/">Get Started</a></button>
+                            <button className="main__btn"><Link to="/MainDashboard">Get Started</Link></button>
                             </div>
                             <div className="main__img--container">
                             <img src={pic} alt="pic" id="main__img" />
