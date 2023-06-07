@@ -14,7 +14,7 @@ const Youtube = (props) => {
     // Check if the accessToken exists in sessionStorage
     const storedAccessToken = sessionStorage.getItem('accessToken');
     console.log("stored token", storedAccessToken);
-    if (storedAccessToken) {
+    if (!storedAccessToken && storedAccessToken !== 'undefined') {
       setAccessToken(storedAccessToken);
     }
   }, []);
@@ -87,8 +87,19 @@ const Youtube = (props) => {
     window.location.href = genAuthUrl();
   }
 
+
+  const [weeklyVW, setWeeklyVW] = useState([]);
+  const [weeklyLikes, setWeeklyLikes] = useState([]);
+  const [weeklyFL, setWeeklyFL] = useState([]);
+  const [monthlyVW, setMonthlyVW] = useState([]);
+  const [monthlyLikes, setMonthlyLikes] = useState([]);
+  const [monthlyFL, setMonthlyFL] = useState([]);  
+  const [yearlyVW, setYearlyVW] = useState([]);
+  const [yearlyLikes, setYearlyLikes] = useState([]);
+  const [yearlyFL, setYearlyFL] = useState([]);
+
   useEffect(() => {
-    console.log(`ACCESS TOKEN IN USEEFFECT ACCESSTOKEN${accessToken}`)
+    //console.log(`ACCESS TOKEN IN USEEFFECT ACCESSTOKEN${accessToken}`)
     /////////////////////// YOUTUBE API/////////////////////////////////////
     function populateDataMap(startDate, endDate, dimensions, maxResults) {
       const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
@@ -102,34 +113,33 @@ const Youtube = (props) => {
         'access_token': accessToken
       });
 
-      // Send the GET request using fetch()
-      //try {
-        fetch(`${url}?${params}`).then((response) => {
+    // Send the GET request using fetch()
 
-        
-        const data = response.json();
-console.log(response);
-console.log(`${url}?${params}`);
-        const dataMap = new Map();
-        let currentDate = new Date(startDate);
-        currentDate.setDate(currentDate.getDate()); //Skip one day because it starts from the day before so it will always be 0
-        let currentEndDate = new Date(endDate)
+    return fetch(`${url}?${params}`)
+    .then((response) => response.json())
+    .then((data) =>{
+      console.log(data);
+      console.log(`${url}?${params}`);
+      const dataMap = new Map();
+      let currentDate = new Date(startDate);
+      currentDate.setDate(currentDate.getDate()); //Skip one day because it starts from the day before so it will always be 0
+      let currentEndDate = new Date(endDate)
 
-        while (currentDate <= currentEndDate) {
-          let dateKey;
+      while (currentDate <= currentEndDate) {
+        let dateKey;
 
-          if (dimensions === 'day') {
-            dateKey = currentDate.toISOString().split("T")[0];
-            currentDate.setDate(currentDate.getDate() + 1);
-          } else if (dimensions === 'month') {
-            dateKey = getMonthKey(currentDate);
-            currentDate.setMonth(currentDate.getMonth() + 1);
-          }
-
-          dataMap.set(dateKey, [0, 0, 0]);
+        if (dimensions === 'day') {
+          dateKey = currentDate.toISOString().split("T")[0];
+          currentDate.setDate(currentDate.getDate() + 1);
+        } else if (dimensions === 'month') {
+          dateKey = getMonthKey(currentDate);
+          currentDate.setMonth(currentDate.getMonth() + 1);
         }
 
-        data.rows.forEach(row => {
+        dataMap.set(dateKey, [0, 0, 0]);
+      }
+
+      data.rows.forEach(row => {
         const date = row[0];
         const views = row[1];
         const likes = row[2];
@@ -141,17 +151,15 @@ console.log(`${url}?${params}`);
             const monthKey = getMonthKey(new Date(date));
             dataMap.set(monthKey, value);
         }
-        });
+      });
 
-        const viewsArray = Array.from(dataMap.values()).map(([firstValue]) => firstValue);
-        const likesArray = Array.from(dataMap.values()).map(([_, secondValue]) => secondValue);
-        const subsArray = Array.from(dataMap.values()).map(([_, x, thirdValue]) => thirdValue);
+      const viewsArray = Array.from(dataMap.values()).map(([firstValue]) => firstValue);
+      const likesArray = Array.from(dataMap.values()).map(([_, secondValue]) => secondValue);
+      const subsArray = Array.from(dataMap.values()).map(([_, x, thirdValue]) => thirdValue);
 
-        return [viewsArray, likesArray, subsArray]
-        });
-      /*} catch (error) {
-        console.error(error);
-      }*/
+      return [viewsArray, likesArray, subsArray]
+    });
+
     }
 
     function getMonthKey(date) {
@@ -160,64 +168,78 @@ console.log(`${url}?${params}`);
       return `${year}-${String(month).padStart(2, '0')}`;
     }
 
-    var weeklyVW = Array.from({ length: 7 }, () => 0);
-    var weeklyLikes = Array.from({ length: 7 }, () => 0);
-    var weeklyFL = Array.from({ length: 7 }, () => 0);
-    
-    var monthlyVW = Array.from({ length: 31 }, () => 0);
-    var monthlyLikes = Array.from({ length: 31 }, () => 0);
-    var monthlyFL = Array.from({ length: 31 }, () => 0);
-    
-    var yearlyVW = Array.from({ length: 12 }, () => 0);
-    var yearlyLikes = Array.from({ length: 12 }, () => 0);
-    var yearlyFL = Array.from({ length: 12 }, () => 0);
-    try{
-      const today = new Date();
-      const currentYear = today.getFullYear();
-      const currentWeek = Math.ceil(today.getDate() / 7);
-      const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
-
-      [weeklyVW, weeklyLikes, weeklyFL] = populateDataMap(
-        `${currentYear}-${currentMonth}-${String(((currentWeek - 1) * 7 + 1)).padStart(2, '0')}`,
-        `${currentYear}-${currentMonth}-${String((currentWeek * 7)).padStart(2, '0')}`,
-        'day',
-        '7'
-      )
-      [monthlyVW, monthlyLikes, monthlyFL] = populateDataMap(
-        `${currentYear}-${currentMonth}-31`,
-        `${currentYear}-${currentMonth}-31`,
-        'day',
-        '31'
-      )
-      [yearlyVW, yearlyLikes, yearlyFL] = populateDataMap(
-        `${currentYear - 1}-12-31`,
-        `${currentYear}-12-31`,
-        'month',
-        '12'
-      )
-    } catch (error) {
-      console.log(error);
-    }
-
-    ///////////////////CHARTS////////////////////
-    
     const weeklyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const monthlyLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
     '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
     const yearlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    async function getData(){
+      try{
+        const today = new Date();
+        const currentYear = 2018;
+        console.log("CURRENTYEAR:", currentYear);
+        const currentWeek = Math.ceil(today.getDate() / 7);
+        const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
 
-    /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
-    renderCharts("#weekChart_fl", weeklyFL, weeklyLabels);
-    renderCharts("#weekChart_vw", weeklyVW, weeklyLabels);
-    renderCharts("#weekChart_likes", weeklyLikes, weeklyLabels);
-    renderCharts("#monthChart_fl", monthlyFL, monthlyLabels);
-    renderCharts("#monthChart_vw", monthlyVW, monthlyLabels);
-    renderCharts("#monthChart_likes", monthlyLikes, monthlyLabels);
-    renderCharts("#yearChart_fl", yearlyFL, yearlyLabels);
-    renderCharts("#yearChart_vw", yearlyVW, yearlyLabels);
-    renderCharts("#yearChart_likes", yearlyLikes, yearlyLabels);
-    ///////////////////END/////////////////////
+        await Promise.all([
+          populateDataMap(
+            `${currentYear}-${currentMonth}-${String(((currentWeek - 1) * 7 + 1)).padStart(2, '0')}`,
+            `${currentYear}-${currentMonth}-${String((currentWeek * 7)).padStart(2, '0')}`,
+            'day',
+            '7'
+          ).then(([VW, LK, FL]) => {
+            console.log(VW, LK, FL);
+            setWeeklyFL(FL);
+            setWeeklyLikes(LK);
+            setWeeklyVW(VW);
+          }),
+          populateDataMap(
+            `${currentYear}-${currentMonth}-01`,
+            `${currentYear}-${currentMonth}-30`,
+            'day',
+            '31'
+          ).then(([VW, LK, FL]) => {
+            console.log(VW, LK, FL);
+            setMonthlyFL(FL);
+            setMonthlyLikes(LK);
+            setMonthlyVW(VW);
+          }),
+          populateDataMap(
+            `${currentYear}-02-01`,
+            `${currentYear + 1}-01-01`,
+            'month',
+            '12'
+          ).then(([VW, LK, FL]) => {
+            console.log(VW, LK, FL);
+            setYearlyFL(FL);
+            setYearlyLikes(LK);
+            setYearlyVW(VW);
+          })
+        ]);
+        console.log([weeklyVW, weeklyLikes, weeklyFL]);
+        console.log([monthlyVW, monthlyLikes, monthlyFL]);
+        console.log([yearlyVW, yearlyLikes, yearlyFL]);
+
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    ///////////////////CHARTS////////////////////
+    if (accessToken && accessToken !== 'undefined'){
+      getData();
+      /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
+      renderCharts("#weekChart_fl", weeklyFL, weeklyLabels);
+      renderCharts("#weekChart_vw", weeklyVW, weeklyLabels);
+      renderCharts("#weekChart_likes", weeklyLikes, weeklyLabels);
+      renderCharts("#monthChart_fl", monthlyFL, monthlyLabels);
+      renderCharts("#monthChart_vw", monthlyVW, monthlyLabels);
+      renderCharts("#monthChart_likes", monthlyLikes, monthlyLabels);
+      renderCharts("#yearChart_fl", yearlyFL, yearlyLabels);
+      renderCharts("#yearChart_vw", yearlyVW, yearlyLabels);
+      renderCharts("#yearChart_likes", yearlyLikes, yearlyLabels);
+      ///////////////////END/////////////////////
+    }
 
 
     ////////////////expend_hide_button_animations/////////////////////////
