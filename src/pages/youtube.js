@@ -134,6 +134,8 @@ const Youtube = (props) => {
         } else if (dimensions === 'month') {
           dateKey = getMonthKey(currentDate);
           currentDate.setMonth(currentDate.getMonth() + 1);
+        } else if (dimensions === 'channel') {
+          return data.rows[0];
         }
 
         dataMap.set(dateKey, [0, 0, 0]);
@@ -188,7 +190,6 @@ const Youtube = (props) => {
             'day',
             '7'
           ).then(([VW, LK, FL]) => {
-            console.log(VW, LK, FL);
             setWeeklyFL(FL);
             setWeeklyLikes(LK);
             setWeeklyVW(VW);
@@ -199,7 +200,6 @@ const Youtube = (props) => {
             'day',
             '31'
           ).then(([VW, LK, FL]) => {
-            console.log(VW, LK, FL);
             setMonthlyFL(FL);
             setMonthlyLikes(LK);
             setMonthlyVW(VW);
@@ -210,15 +210,11 @@ const Youtube = (props) => {
             'month',
             '12'
           ).then(([VW, LK, FL]) => {
-            console.log(VW, LK, FL);
             setYearlyFL(FL);
             setYearlyLikes(LK);
             setYearlyVW(VW);
           })
         ]);
-        console.log([weeklyVW, weeklyLikes, weeklyFL]);
-        console.log([monthlyVW, monthlyLikes, monthlyFL]);
-        console.log([yearlyVW, yearlyLikes, yearlyFL]);
 
       } catch (error) {
         console.log(error);
@@ -291,10 +287,23 @@ const Youtube = (props) => {
       chartYearlyL.style.display = (chartPeriod === 3 && chartType === 2) ? 'grid' : 'none';
     }
     
-    function updateStats() {
+    async function updateStats() {
       var ytFollowers = 111;
       var ytLikes = 222;
       var ytViews = 333;
+      const today = new Date();
+      await populateDataMap(
+        `2014-01-01`,
+        `2023-05-03`,
+        'channel',
+        '5'
+      ).then(([_, VW, LK, FL]) => {
+        console.log(VW, LK, FL);
+        ytFollowers = FL;
+        ytLikes = LK;
+        ytViews = VW;
+      })
+
       var ytFollowersW = 1111;
       var ytLikesW = 2222;
       var ytViewsW = 3333;
@@ -339,8 +348,10 @@ const Youtube = (props) => {
     });
     
     // Initial setup
-    updateChartDisplay();
-    updateStats();
+    if (accessToken && accessToken !== 'undefined'){
+      updateChartDisplay();
+      updateStats();
+    }
 
       ////////////////END/////////////////////////
   }, [accessToken]);
