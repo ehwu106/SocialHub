@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "./youtube.css";
+import "./dashboard.css";
 import renderCharts from './renderCharts';
 
 const Youtube = (props) => {
@@ -10,8 +10,8 @@ const Youtube = (props) => {
   const [accessToken, setAccessToken] = useState(null);
   // Check if the accessToken exists in sessionStorage
   const storedAccessToken = sessionStorage.getItem('accessToken');
-  console.log("stored token", storedAccessToken);
-  if (storedAccessToken) {
+  if (storedAccessToken != 'undefined') {
+    console.log("stored token", storedAccessToken);
     setAccessToken(storedAccessToken);
   }
 
@@ -102,11 +102,11 @@ const Youtube = (props) => {
       // Send the GET request using fetch()
       try {
         const response = await fetch(`${url}?${params}`);
-        const data = response.json();
+        const data = await response.json();
 
         const dataMap = new Map();
         let currentDate = new Date(startDate);
-        currentDate.setDate(currentDate.getDate()); //Skip one day because it starts from the day before so it will always be 0
+        currentDate.setDate(currentDate.getDate() + 1); //Skip one day because it starts from the day before so it will always be 0
         let currentEndDate = new Date(endDate)
 
         while (currentDate <= currentEndDate) {
@@ -212,8 +212,9 @@ const Youtube = (props) => {
     renderCharts("#yearChart_vw", yearlyVW, yearlyLabels);
     renderCharts("#yearChart_likes", yearlyLikes, yearlyLabels);
     ///////////////////END/////////////////////
+  }, []);
 
-
+  useEffect(() => {
     ////////////////expend_hide_button_animations/////////////////////////
     document.getElementById('expend_btn').addEventListener('click', function () {
       var element1 = document.querySelector('.card_extra');
@@ -315,7 +316,7 @@ const Youtube = (props) => {
     updateStats();
 
       ////////////////END/////////////////////////
-  }, [accessToken]);
+  }, []);
 
   return (
     <div className="grid-container">
