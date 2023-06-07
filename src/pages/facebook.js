@@ -32,8 +32,6 @@ const Facebook = (props) => {
         if (response.authResponse) {
         console.log('Welcome!  Fetching your information.... ');
         window.FB.api('/me', function(response) {
-          console.log('login response');
-          console.log(response);
           setUserState(response);
           fbToken();
         });
@@ -49,7 +47,6 @@ const Facebook = (props) => {
     if (window.FB) {
       window.FB.getLoginStatus(function (r) {
         if (r.status === 'connected') {
-          console.log(r);
           setUserToken(r.authResponse.accessToken)
         }
       })
@@ -74,7 +71,6 @@ const Facebook = (props) => {
       let pageNames = [];
       pageIds.forEach((page) => {
         window.FB.api(`/${page.id}/`,'get',{access_token: page.access_token, fields: 'followers_count,fan_count,new_like_count,rating_count,talking_about_count,were_here_count'}, function (response) {
-          //console.log(response);
           let newData = {...pageData};
           followers.push(response.followers_count);
           views.push(response.were_here_count);
@@ -96,12 +92,6 @@ const Facebook = (props) => {
     }
   }
 
-  function setAllProperty(elements, type) {
-    elements.forEach((e) => {
-      e.setProperty("display", "none");
-      console.log(e);
-    });
-  }
   return (
     <div>
       {!userToken &&
@@ -160,7 +150,6 @@ const Facebook = (props) => {
               <button id="bar_btn" onClick={() => {
                 document.querySelectorAll(".linear_chart").forEach((e) => {
                   e.style.display = 'none';
-                  console.log(e);
                 });
                 document.querySelectorAll(".bar_chart").forEach((e) => {
                   e.style.display = 'grid';

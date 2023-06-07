@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import "./youtube.css";
+import "./dashboard.css";
 import renderCharts from './renderCharts';
 
 const Youtube = (props) => {
@@ -8,12 +8,16 @@ const Youtube = (props) => {
   const CLIENT_SECRET = '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';
   const redirectUri = 'http://localhost:3000/dashboard_yt';
   const [accessToken, setAccessToken] = useState(null);
-  // Check if the accessToken exists in sessionStorage
-  const storedAccessToken = sessionStorage.getItem('accessToken');
-  console.log("stored token", storedAccessToken);
-  if (storedAccessToken) {
-    setAccessToken(storedAccessToken);
-  }
+
+
+  useEffect(() => {
+    // Check if the accessToken exists in sessionStorage
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    console.log("stored token", storedAccessToken);
+    if (storedAccessToken) {
+      setAccessToken(storedAccessToken);
+    }
+  }, []);
 
 
   function genAuthUrl(){
@@ -57,6 +61,7 @@ const Youtube = (props) => {
       // Handle the tokens response as needed
       setAccessToken(tokens.access_token);
       sessionStorage.setItem('accessToken', tokens.access_token);
+      console.log("ACCESS TOKEN FROM HANDLEAUTHCODE");
       console.log(tokens.access_token);
 
     } catch (error) {
@@ -65,29 +70,27 @@ const Youtube = (props) => {
   };
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search);
-    const code = searchParams.get('code');
+    if (!accessToken) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const code = searchParams.get('code');
 
-    const handleAuth = async () => {
-      // Use the code and scope values for further processing
-      await handleAuthorizationCode(code);
-    };
-    // Call the async function
-    handleAuth()
+      const handleAuth = async () => {
+        // Use the code and scope values for further processing
+        await handleAuthorizationCode(code);
+      };
+      // Call the async function
+      handleAuth()
+    }
   }, []);
 
   function GoogleLogin() {
-    useEffect(() => {
-      // Perform the redirect after the component mounts
-      window.location.href = genAuthUrl();
-    }, []);
-  
-    return null; // or any JSX you want to render
+    window.location.href = genAuthUrl();
   }
 
   useEffect(() => {
+    console.log(`ACCESS TOKEN IN USEEFFECT ACCESSTOKEN${accessToken}`)
     /////////////////////// YOUTUBE API/////////////////////////////////////
-    async function populateDataMap(startDate, endDate, dimensions, maxResults) {
+    function populateDataMap(startDate, endDate, dimensions, maxResults) {
       const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
       const params = new URLSearchParams({
         'ids': 'channel==MINE',
@@ -100,10 +103,13 @@ const Youtube = (props) => {
       });
 
       // Send the GET request using fetch()
-      try {
-        const response = await fetch(`${url}?${params}`);
-        const data = response.json();
+      //try {
+        fetch(`${url}?${params}`).then((response) => {
 
+        
+        const data = response.json();
+console.log(response);
+console.log(`${url}?${params}`);
         const dataMap = new Map();
         let currentDate = new Date(startDate);
         currentDate.setDate(currentDate.getDate()); //Skip one day because it starts from the day before so it will always be 0
@@ -142,10 +148,10 @@ const Youtube = (props) => {
         const subsArray = Array.from(dataMap.values()).map(([_, x, thirdValue]) => thirdValue);
 
         return [viewsArray, likesArray, subsArray]
-
-      } catch (error) {
+        });
+      /*} catch (error) {
         console.error(error);
-      }
+      }*/
     }
 
     function getMonthKey(date) {
@@ -316,7 +322,6 @@ const Youtube = (props) => {
 
       ////////////////END/////////////////////////
   }, [accessToken]);
-
   return (
     <div className="grid-container">
       {/* Main */}
@@ -326,6 +331,7 @@ const Youtube = (props) => {
           <button id="expend_btn">expend</button>
           <button id="hide_btn">hide</button>
         </div>
+        <button onClick={GoogleLogin}>login</button>
 
         <div className="main-cards">
           <div className="card">
