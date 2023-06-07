@@ -9,32 +9,7 @@ import Facebook from './facebook';
 import SignOutButton from './signoutbutton';
 
 const MainDashboard = (props) => {
-  //const [userState, setUserState] = useState(null);
   const [dashboardState, setDashboardState] = useState('dashboard');
-
-  /*var sidebarOpen = false;
-  const sidebar = document.getElementById("sidebar");
-
-  function openSidebar() {
-    if (!sidebarOpen) {
-      sidebar.classList.add("sidebar-responsive");
-      sidebarOpen = true;
-    }
-  }
-  function closeSidebar() {
-    if (sidebarOpen) {
-      sidebar.classList.remove("sidebar-responsive");
-      sidebarOpen = false;
-    }
-  }
-
-  useEffect(() => {
-    if (userState) {
-      openSidebar();
-    } else {
-      closeSidebar();
-    }
-  }, [userState]);*/
 
   /**
    * Initializes the Facebook SDK
@@ -124,6 +99,7 @@ const MainDashboard = (props) => {
               <p className="font-weight-bold">DASHBOARD</p>
             </div>
             
+            <h2>Connect a social media account using the sidebar on the left.</h2>
             {/*<div className="main-cards">
               <div className="card">
                 <div className="card-inner">

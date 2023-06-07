@@ -1,4 +1,11 @@
 import ApexCharts from 'apexcharts';
+
+/**
+ * Render the bar chart and area chart as a child of the #chartId element using the data and labels specified.
+ * @param {String} chartId 
+ * @param {Array} data 
+ * @param {Array} labels 
+ */
 const renderCharts = (chartId, data, labels) => {
   function renderBarChart(selector, data, categories) {
     var barChartOptions = {
