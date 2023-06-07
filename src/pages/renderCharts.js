@@ -87,8 +87,8 @@ const renderCharts = (chartId, data, labels) => {
 
   document.querySelector(chartId).innerHTML = '';
   document.querySelector(`${chartId}_linear`).innerHTML = '';
-  
+
   renderBarChart(chartId, data, labels);
-  renderAreaChart(`${chartId}_linear`, [{ name: 'YouTube', data }], labels);
+  renderAreaChart(`${chartId}_linear`, [{ name: 'Series 1', data }], labels);
 };
 export default renderCharts;

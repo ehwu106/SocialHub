@@ -55,6 +55,7 @@ body{
     height: 100vh;
 
 }
+
 /*header*/
 .header{
     grid-area: header;
@@ -71,6 +72,7 @@ body{
     display: none;
     
 }
+
 /*sidebar*/
 #sidebar{
     grid-area: sidebar;
@@ -125,6 +127,7 @@ body{
     display: inline !important;
     position: absolute;
 }
+
 /*main*/
 .main-container{
     grid-area: main;
@@ -191,26 +194,9 @@ body{
     color:#246dec;
     display: none;
 }
-/*
-.card:first-child{
-    border-left: 7px solid #246dec;
-}
-
-.card:nth-child(2){
-    border-left: 7px solid #246dec;
-}
-
-.card:nth-child(3){
-    border-left: 7px solid #246dec;
-}
-*/
 .card_extra{
     display: none;
 }
-
-
-
-
 .card > span{
     font-size: 20px;
     font-weight: 600;

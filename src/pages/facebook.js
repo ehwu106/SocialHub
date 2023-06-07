@@ -1,12 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import './styles.css';
+import './facebook.css';
 import renderCharts from './renderCharts';
 
 const Facebook = (props) => {
   const [userState, setUserState] = useState(null);
   const [userToken, setUserToken] = useState(null);
   const [pageData, setPageData] = useState(null);
-  const [linear, setLinear] = useState(false);
 
   useEffect(() => {
     if (userState) {

@@ -1,27 +1,18 @@
-
 import React, { useState, useEffect } from 'react';
 import './dashboard.css';
-//import { NavLink, Link } from "react-router-dom";
 import "@aws-amplify/ui-react/styles.css";
 import {
   withAuthenticator,
-  //Button,
-  //Heading,
-  //Image,
-  //View,
-  //Card,
 } from "@aws-amplify/ui-react";
 import Youtube from './youtube';
-import SignOutButton from './signoutbutton';
 import Facebook from './facebook';
-
-//import { Auth } from 'aws-amplify';
+import SignOutButton from './signoutbutton';
 
 const MainDashboard = (props) => {
-  const [userState, setUserState] = useState(null);
+  //const [userState, setUserState] = useState(null);
   const [dashboardState, setDashboardState] = useState('dashboard');
 
-  var sidebarOpen = false;
+  /*var sidebarOpen = false;
   const sidebar = document.getElementById("sidebar");
 
   function openSidebar() {
@@ -43,8 +34,11 @@ const MainDashboard = (props) => {
     } else {
       closeSidebar();
     }
-  }, [userState]);
+  }, [userState]);*/
 
+  /**
+   * Initializes the Facebook SDK
+   */
   function fbInit() {
     window.fbAsyncInit = () => {
       window.FB.init({
@@ -64,28 +58,30 @@ const MainDashboard = (props) => {
         console.log("adding fb ele")
     }(document, 'script', 'facebook-jssdk'));
   }
-
   useEffect(() => {
     fbInit();
   }, [])
+
+  /**
+   * Handles the sidebar buttons
+   * @param {String} mode social media platform to display
+   */
   function handleSidebarClick(mode) {
     setDashboardState(mode);
   }
+
   return (
     <div>
       <div className="grid-container">
         <header className="header">
-          <div className="menu-icon" onClick={openSidebar}>
+          <div className="menu-icon">
             <span className="material-icons-outlined">menu</span>
           </div>
           <div className="header-left">
             <span className="material-icons-outlined">search</span>
           </div>
           <div className="header-right">
-            
             <SignOutButton />
-            {/*<span className="material-icons-outlined">settings</span>
-            <span className="material-icons-outlined">account_circle</span>*/}
           </div>
         </header>
 
@@ -94,7 +90,7 @@ const MainDashboard = (props) => {
             <div className="sidebar-brand">
               <span className="material-icons-outlined">dashboard</span>SocialHub
             </div>
-            <span className="material-icons-outlined" onClick={closeSidebar}>close</span>
+            <span className="material-icons-outlined">close</span>
           </div>
 
           <ul className="sidebar-list">
