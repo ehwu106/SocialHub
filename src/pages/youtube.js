@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "./dashboard.css";
 import renderCharts from './renderCharts';
+import { Link } from "react-router-dom";
 
 const Youtube = (props) => {
   // Set the required parameters
@@ -9,15 +10,30 @@ const Youtube = (props) => {
   const redirectUri = 'http://localhost:3000/dashboard_yt';
   const [accessToken, setAccessToken] = useState(null);
 
-
+  const [userState, setUserState] = useState(null);
+  var sidebarOpen = false;
+  var sidebar = document.getElementById("sidebar");
+  
+  function openSidebar(){
+      if(!sidebarOpen){
+          sidebar.classList.add("sidebar-responsive");
+          sidebarOpen = true;
+      }
+  }
+  function closeSidebar(){
+      if(sidebarOpen){
+          sidebar.classList.remove("sidebar-responsive");
+          sidebarOpen = false;
+      }
+  }
   useEffect(() => {
-    // Check if the accessToken exists in sessionStorage
-    const storedAccessToken = sessionStorage.getItem('accessToken');
-    console.log("stored token", storedAccessToken);
-    if (!storedAccessToken && storedAccessToken !== 'undefined') {
-      setAccessToken(storedAccessToken);
+    if (userState) {
+      openSidebar();
+    } else {
+      setUserState(true);
+      closeSidebar();
     }
-  }, []);
+  }, [userState]);
 
 
   function genAuthUrl(){
@@ -70,7 +86,13 @@ const Youtube = (props) => {
   };
 
   useEffect(() => {
-    if (!accessToken) {
+    const storedAccessToken = sessionStorage.getItem('accessToken');
+    console.log("stored token", storedAccessToken);
+    if (!storedAccessToken && storedAccessToken !== 'undefined') {
+      setAccessToken(storedAccessToken);
+    }
+
+    if (!accessToken && accessToken !== 'undefined') {
       const searchParams = new URLSearchParams(window.location.search);
       const code = searchParams.get('code');
 
@@ -378,6 +400,43 @@ const Youtube = (props) => {
   }, [accessToken]);
   return (
     <div className="grid-container">
+      {/* Sidebar */}
+      <aside id="sidebar">
+        <div className="sidebar-title">
+          <div className="sidebar-brand">
+            <span className="material-icons-outlined">dashboard</span>
+            SocialHub
+          </div>
+          <span
+            className="material-icons-outlined"
+            id="close_btn"
+            onClick={closeSidebar}
+          >
+            close
+          </span>
+        </div>
+
+        <ul className="sidebar-list">
+        <Link to="/MainDashboard">
+            <li className="sidebar-list-item">
+                <span className="material-icons-outlined">home</span>
+                Dashboard
+            </li>
+        </Link>
+        <Link to="/dashboard_yt">
+          <li className="sidebar-list-item">
+              <span className="material-icons-outlined">label_important</span>
+              YouTube
+          </li>
+        </Link>
+        <Link to="/MainDashboard">
+            <li className="sidebar-list-item">
+                <span className="material-icons-outlined">label_important</span>
+                Facebook
+            </li>
+        </Link>
+        </ul>
+      </aside>
       {/* Main */}
       <main className="main-container">
         <div className="main-title">
