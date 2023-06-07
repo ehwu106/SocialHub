@@ -6,8 +6,7 @@ import Login from "./pages/login"
 import Youtube from "./pages/youtube"
 import MainDashboard from "./pages/dashboard"
 import Facebook from './pages/facebook'
-
-import { BrowserRouter as Router, Routes, Route, Link} from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom'
 
 function App() {
   return <div>
