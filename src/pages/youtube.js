@@ -87,17 +87,6 @@ const Youtube = (props) => {
     window.location.href = genAuthUrl();
   }
 
-
-  const [weeklyVW, setWeeklyVW] = useState([]);
-  const [weeklyLikes, setWeeklyLikes] = useState([]);
-  const [weeklyFL, setWeeklyFL] = useState([]);
-  const [monthlyVW, setMonthlyVW] = useState([]);
-  const [monthlyLikes, setMonthlyLikes] = useState([]);
-  const [monthlyFL, setMonthlyFL] = useState([]);  
-  const [yearlyVW, setYearlyVW] = useState([]);
-  const [yearlyLikes, setYearlyLikes] = useState([]);
-  const [yearlyFL, setYearlyFL] = useState([]);
-
   useEffect(() => {
     //console.log(`ACCESS TOKEN IN USEEFFECT ACCESSTOKEN${accessToken}`)
     /////////////////////// YOUTUBE API/////////////////////////////////////
@@ -170,6 +159,16 @@ const Youtube = (props) => {
       return `${year}-${String(month).padStart(2, '0')}`;
     }
 
+    var weeklyVW;
+    var weeklyLikes;
+    var weeklyFL;
+    var monthlyVW;
+    var monthlyLikes;
+    var monthlyFL;  
+    var yearlyVW;
+    var yearlyLikes;
+    var yearlyFL;
+
     const weeklyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const monthlyLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
     '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
@@ -190,9 +189,9 @@ const Youtube = (props) => {
             'day',
             '7'
           ).then(([VW, LK, FL]) => {
-            setWeeklyFL(FL);
-            setWeeklyLikes(LK);
-            setWeeklyVW(VW);
+            weeklyFL = FL;
+            weeklyLikes = LK;
+            weeklyVW = VW;
           }),
           populateDataMap(
             `${currentYear}-${currentMonth}-01`,
@@ -200,9 +199,9 @@ const Youtube = (props) => {
             'day',
             '31'
           ).then(([VW, LK, FL]) => {
-            setMonthlyFL(FL);
-            setMonthlyLikes(LK);
-            setMonthlyVW(VW);
+            monthlyFL = FL;
+            monthlyLikes = LK;
+            monthlyVW = VW;
           }),
           populateDataMap(
             `${currentYear}-02-01`,
@@ -210,20 +209,23 @@ const Youtube = (props) => {
             'month',
             '12'
           ).then(([VW, LK, FL]) => {
-            setYearlyFL(FL);
-            setYearlyLikes(LK);
-            setYearlyVW(VW);
+            yearlyFL = FL;
+            yearlyLikes = LK;
+            yearlyVW = VW;
           })
         ]);
+        console.log([weeklyVW, weeklyLikes, weeklyFL]);
+        console.log([monthlyVW, monthlyLikes, monthlyFL]);
+        console.log([yearlyVW, yearlyLikes, yearlyFL]);
 
       } catch (error) {
         console.log(error);
       }
     }
 
-    ///////////////////CHARTS////////////////////
-    if (accessToken && accessToken !== 'undefined'){
-      getData();
+    async function renderAllCharts(){
+      await getData();
+      console.log('rendering charts');
       /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
       renderCharts("#weekChart_fl", weeklyFL, weeklyLabels);
       renderCharts("#weekChart_vw", weeklyVW, weeklyLabels);
@@ -234,6 +236,10 @@ const Youtube = (props) => {
       renderCharts("#yearChart_fl", yearlyFL, yearlyLabels);
       renderCharts("#yearChart_vw", yearlyVW, yearlyLabels);
       renderCharts("#yearChart_likes", yearlyLikes, yearlyLabels);
+    }
+    ///////////////////CHARTS////////////////////
+    if (accessToken && accessToken !== 'undefined'){
+      renderAllCharts();
       ///////////////////END/////////////////////
     }
 
@@ -287,6 +293,17 @@ const Youtube = (props) => {
       chartYearlyL.style.display = (chartPeriod === 3 && chartType === 2) ? 'grid' : 'none';
     }
     
+    function sumArray(array) {
+      return array.reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+    }
+    
+    async function updateElementTextContent(elementId, value) {
+      const element = document.getElementById(elementId);
+      if (element) {
+        element.textContent = value;
+      }
+    }
+
     async function updateStats() {
       var ytFollowers = 111;
       var ytLikes = 222;
@@ -304,22 +321,26 @@ const Youtube = (props) => {
         ytViews = VW;
       })
 
-      var ytFollowersW = 1111;
-      var ytLikesW = 2222;
-      var ytViewsW = 3333;
-      var ytFollowersM = 11111;
-      var ytLikesM = 22222;
-      var ytViewsM = 33333;
-      
-      document.getElementById('yt_followers').textContent = ytFollowers;
-      document.getElementById('yt_likes').textContent = ytLikes;
-      document.getElementById('yt_views').textContent = ytViews;
-      document.getElementById('yt_followers_w').textContent = ytFollowersW;
-      document.getElementById('yt_likes_w').textContent = ytLikesW;
-      document.getElementById('yt_views_w').textContent = ytViewsW;
-      document.getElementById('yt_followers_m').textContent = ytFollowersM;
-      document.getElementById('yt_likes_m').textContent = ytLikesM;
-      document.getElementById('yt_views_m').textContent = ytViewsM;
+      await getData();
+
+      var ytFollowersW = sumArray(weeklyFL);
+      var ytLikesW = sumArray(weeklyLikes);
+      var ytViewsW = sumArray(weeklyVW);
+      var ytFollowersM = sumArray(monthlyFL);
+      var ytLikesM = sumArray(monthlyLikes);
+      var ytViewsM = sumArray(monthlyVW);
+    
+      await Promise.all([
+        updateElementTextContent('yt_followers', ytFollowers),
+        updateElementTextContent('yt_likes', ytLikes),
+        updateElementTextContent('yt_views', ytViews),
+        updateElementTextContent('yt_followers_w', ytFollowersW),
+        updateElementTextContent('yt_likes_w', ytLikesW),
+        updateElementTextContent('yt_views_w', ytViewsW),
+        updateElementTextContent('yt_followers_m', ytFollowersM),
+        updateElementTextContent('yt_likes_m', ytLikesM),
+        updateElementTextContent('yt_views_m', ytViewsM)
+      ]);
     }
     
     document.getElementById('bar_btn').addEventListener('click', function() {
