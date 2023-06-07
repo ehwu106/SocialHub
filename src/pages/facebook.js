@@ -3,8 +3,7 @@ import './styles.css';
 //import runScriptJS from './script.js';
 import ApexCharts from 'apexcharts';
 
-const MainDashboard = (props) => {
-  const fbstate = useState(null);
+const Facebook = (props) => {
   const [userState, setUserState] = useState(null);
   const [userToken, setUserToken] = useState(null);
   const [pageData, setPageData] = useState(null);
@@ -12,6 +11,7 @@ const MainDashboard = (props) => {
   const [pageLikeEle, setPageLikeEle] = useState(<></>);
   const [pageViewerEle, setPageViewerEle] = useState(<></>);
   const [weekOptions_fls, setWeekOptions_fls] = useState(null);
+
   useEffect(() => {
     ///////////////////SIDEBAR TOGGLE//////////////////////
 
@@ -817,23 +817,13 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
 ////////////////END/////////////////////////
   }, [userState]);
 
-  // runs on component mount
-  useEffect(() => {
-    //runScriptJS();
-    //fbInit();
-  }, []);
 
   useEffect(() => {
     //var weekChart_fl = new ApexCharts(document.querySelector("#weekChart_fl"), weekOptions_fls);
     //weekChart_fl.render();
   }, [weekOptions_fls])
-  /*useEffect(() => {
-    if (userToken) {
-    const ids = fbGetPages();
-    }
-    //countFbFollowers(ids);
-  }, [userToken])*/
-  function fbInit() {
+
+  /*function fbInit() {
     window.fbAsyncInit = () => {
       window.FB.init({
           appId            : '639014718039079',
@@ -850,8 +840,8 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
         js.crossorigin="anonymous";
         fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-  }
-  function getLogin() {
+  }*/
+  /*function getLogin() {
     if (window.FB) {
       window.FB.getLoginStatus(function (r) {
         if (r.status === 'connected') {
@@ -863,7 +853,7 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
         }
       })
     }
-  }
+  }*/
   function fblogin() {
     if (window.FB) {
       window.FB.login(function(response) {
@@ -878,7 +868,7 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
         } else {
         console.log('User cancelled login or did not fully authorize.');
         }
-      }, {scope: 'user_posts, public_profile, email, pages_show_list', return_scopes: true});
+      }, {scope: 'public_profile, email, pages_show_list', return_scopes: true});
     } else {
       console.log("window.FB undef");
     }
@@ -1044,24 +1034,20 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
   }
   return (
     <div>
-
       {!userToken &&
       <main className="main-container auth-card">
         <div className="main-cards">
           <div className="card">
             <div className="card-inner">
-              <span className="text-blue ">Authorize with at least one social media to see metrics.</span>
+              <span className="text-blue ">Facebook authorization required to view analytics.</span>
 
               <button onClick={fblogin}>Login with Facebook</button>
-
-              <button onClick={() => {alert("integrate together later")}}>Login with YouTube</button>
             </div>
           </div>
         </div>
       </main>}
       {userToken &&
-      <div className="grid-container">
-        <main className="main-container">
+        <div>
           <div className="main-title">
             <p className="font-weight-bold">FACEBOOK</p>
             <button id="expend_btn">expand</button>
@@ -1214,9 +1200,9 @@ document.getElementById('yt_views_m').textContent = yt_views_m;*/
               <div id="yearChart_likes"></div>
             </div>
           </div>
-        </main>
-      </div>}
+        </div>
+      }
     </div>
   );
 }
-export default MainDashboard;
+export default Facebook;
