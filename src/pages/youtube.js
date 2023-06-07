@@ -1,100 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import "./dashboard.css";
-import ApexCharts from 'apexcharts';
-import {useLocation , Link} from "react-router-dom";
-//import SignOutButton from './signoutbutton';
-
-function renderBarChart(selector, data, categories) {
-  var barChartOptions = {
-    series: [{
-      data: data
-    }],
-    chart: {
-      type: 'bar',
-      height: 350,
-      toolbar: {
-        show: false
-      }
-    },
-    colors: [
-      "#cc3c43",
-      "#367952",
-      "#f5b74f"
-    ],
-    plotOptions: {
-      bar: {
-        distributed: true,
-        borderRadius: 4,
-        horizontal: false,
-        columnWidth: '40%'
-      }
-    },
-    dataLabels: {
-      enabled: false
-    },
-    legend: {
-      show: false
-    },
-    xaxis: {
-      categories: categories
-    },
-    yaxis: {
-      title: {
-        text: "Count"
-      }
-    }
-  };
-
-  var barChart = new ApexCharts(document.querySelector(selector), barChartOptions);
-  barChart.render();
-}
-
-function renderAreaChart(selector, seriesData, labels) {
-  var areaChartOptions = {
-    series: seriesData,
-    chart: {
-      height: 350,
-      type: 'area',
-      toolbar: {
-        show: false
-      }
-    },
-    colors: [
-      "#cc3c43",
-      "#367952",
-      "#f5b74f"
-    ],
-    dataLabels: {
-      enabled: false
-    },
-    stroke: {
-      curve: 'smooth'
-    },
-    labels: labels,
-    markers: {
-      size: 0
-    },
-    yaxis: [{
-      title: {
-        text: 'Followers per month'
-      }
-    }],
-    tooltip: {
-      shared: true,
-      intersect: false
-    }
-  };
-
-  var areaChart = new ApexCharts(document.querySelector(selector), areaChartOptions);
-  areaChart.render();
-}
+import "./youtube.css";
+import renderCharts from './renderCharts';
 
 const Youtube = (props) => {
   // Set the required parameters
   const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
   const CLIENT_SECRET = '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';
-  const redirectUri = 'https://localhost:3000/dashboard_yt/oauth';
-  const [access_token, setAccessToken] = useState(null);
+  const redirectUri = 'http://localhost:3000/dashboard_yt';
+  const [accessToken, setAccessToken] = useState(null);
+  // Check if the accessToken exists in sessionStorage
+  const storedAccessToken = sessionStorage.getItem('accessToken');
+  console.log("stored token", storedAccessToken);
+  if (storedAccessToken) {
+    setAccessToken(storedAccessToken);
+  }
+
 
   function genAuthUrl(){
     // Set the required parameters
@@ -136,33 +56,25 @@ const Youtube = (props) => {
       const tokens = await response.json();
       // Handle the tokens response as needed
       setAccessToken(tokens.access_token);
-      console.log(tokens);
-      console.log(access_token);
+      sessionStorage.setItem('accessToken', tokens.access_token);
+      console.log(tokens.access_token);
 
     } catch (error) {
       console.error('Error retrieving access token:', error);
     }
   };
 
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const code = searchParams.get('code');
 
-  const Oauth = () => {
-    console.log("Getting auth code");
-    useEffect(() => {
-      const searchParams = new URLSearchParams(window.location.search);
-      const code = searchParams.get('code');
-
-      const handleAuth = async () => {
-        // Use the code and scope values for further processing
-        await handleAuthorizationCode(code);
-
-        window.location.href = '/dashboard_yt';
-      };
-      // Call the async function
-      handleAuth()
-    }, []);
-
-    return null;
-  };
+    const handleAuth = async () => {
+      // Use the code and scope values for further processing
+      await handleAuthorizationCode(code);
+    };
+    // Call the async function
+    handleAuth()
+  }, []);
 
   function GoogleLogin() {
     useEffect(() => {
@@ -173,49 +85,9 @@ const Youtube = (props) => {
     return null; // or any JSX you want to render
   }
 
-  const location = useLocation();
-
-  // Access the current pathname from the `location` object
-  const currentPath = location.pathname;
-
-  // Perform conditional logic based on the current pathname
-  if (currentPath === '/dashboard_yt/oauth') {
-    Oauth();
-  }
-
-  const [userState, setUserState] = useState(null);
-  var sidebarOpen = false;
-  var sidebar = document.getElementById("sidebar");
-  
-  function openSidebar(){
-      if(!sidebarOpen){
-          sidebar.classList.add("sidebar-responsive");
-          sidebarOpen = true;
-      }
-  }
-  function closeSidebar(){
-      if(sidebarOpen){
-          sidebar.classList.remove("sidebar-responsive");
-          sidebarOpen = false;
-      }
-  }
   useEffect(() => {
-    if (userState) {
-      openSidebar();
-    } else {
-      closeSidebar();
-    }
-
-    ///////////////////END//////////////////////
-
-    ///////////////////SIDEBAR TOGGLE//////////////////////
-
-
-    ///////////////////END//////////////////////
-
     /////////////////////// YOUTUBE API/////////////////////////////////////
-
-    async function populateDataMap(startDate, endDate, dimensions, maxResults, accessToken) {
+    async function populateDataMap(startDate, endDate, dimensions, maxResults) {
       const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
       const params = new URLSearchParams({
         'ids': 'channel==MINE',
@@ -230,11 +102,11 @@ const Youtube = (props) => {
       // Send the GET request using fetch()
       try {
         const response = await fetch(`${url}?${params}`);
-        const data = await response.json();
+        const data = response.json();
 
         const dataMap = new Map();
         let currentDate = new Date(startDate);
-        currentDate.setDate(currentDate.getDate() + 1); //Skip one day because it starts from the day before so it will always be 0
+        currentDate.setDate(currentDate.getDate()); //Skip one day because it starts from the day before so it will always be 0
         let currentEndDate = new Date(endDate)
 
         while (currentDate <= currentEndDate) {
@@ -303,22 +175,19 @@ const Youtube = (props) => {
         `${currentYear}-${currentMonth}-${String(((currentWeek - 1) * 7 + 1)).padStart(2, '0')}`,
         `${currentYear}-${currentMonth}-${String((currentWeek * 7)).padStart(2, '0')}`,
         'day',
-        '7',
-        access_token
+        '7'
       )
       [monthlyVW, monthlyLikes, monthlyFL] = populateDataMap(
         `${currentYear}-${currentMonth}-31`,
         `${currentYear}-${currentMonth}-31`,
-        'month',
-        '12',
-        access_token
+        'day',
+        '31'
       )
       [yearlyVW, yearlyLikes, yearlyFL] = populateDataMap(
         `${currentYear - 1}-12-31`,
         `${currentYear}-12-31`,
         'month',
-        '12',
-        access_token
+        '12'
       )
     } catch (error) {
       console.log(error);
@@ -333,11 +202,6 @@ const Youtube = (props) => {
     const yearlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
     /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
-    const renderCharts = (chartId, data, labels) => {
-      renderBarChart(chartId, data, labels);
-      renderAreaChart(`${chartId}_linear`, [{ name: 'YouTube', data }], labels);
-    };
-    
     renderCharts("#weekChart_fl", weeklyFL, weeklyLabels);
     renderCharts("#weekChart_vw", weeklyVW, weeklyLabels);
     renderCharts("#weekChart_likes", weeklyLikes, weeklyLabels);
@@ -451,287 +315,203 @@ const Youtube = (props) => {
     updateStats();
 
       ////////////////END/////////////////////////
-  }, [userState]);
+  }, [accessToken]);
 
   return (
-    <div>
-      {!access_token &&
-      <main className="main-container auth-card">
+    <div className="grid-container">
+      {/* Main */}
+      <main className="main-container">
+        <div className="main-title">
+          <p className="font-weight-bold">YOUTUBE</p>
+          <button id="expend_btn">expend</button>
+          <button id="hide_btn">hide</button>
+        </div>
+
         <div className="main-cards">
           <div className="card">
             <div className="card-inner">
-              <span className="text-blue ">Authorize with at least one social media to see metrics.</span>
-
-              <button onClick={GoogleLogin}>Login with Facebook</button>
-
-              <button onClick={() => {alert("integrate together later")}}>Login with YouTube</button>
+              <p className="text-primary">FOLLOWES</p>
+              <span className="material-icons-outlined text-blue">groups</span>
             </div>
+            <span id="yt_followers" className="text-primary font-weight-bold"></span>
+          </div>
+
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">VIEWS</p>
+              <span className="material-icons-outlined text-blue">movie</span>
+            </div>
+            <span id="yt_views" className="text-primary font-weight-bold"></span>
+          </div>
+
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">LIKES</p>
+              <span className="material-icons-outlined text-blue">thumb_up</span>
+            </div>
+            <span id="yt_likes" className="text-primary font-weight-bold"></span>
           </div>
         </div>
-      </main>}
-      {access_token && 
-      <div className="grid-container">
-      {/* Header */}
-        <header className="header">
-          <div className="menu-icon" onClick={openSidebar}>
-            <span className="material-icons-outlined">menu</span>
-          </div>
-          <div className="header-left">
-            <span className="material-icons-outlined">search</span>
-          </div>
-          <div className="header-right">
-            <span className="material-icons-outlined">settings</span>
-            <span className="material-icons-outlined">account_circle</span>
-          </div>
-        </header>
 
-        {/* Sidebar */}
-        <aside id="sidebar">
-          <div className="sidebar-title">
-            <div className="sidebar-brand">
-              <span className="material-icons-outlined">dashboard</span>
-              SocialHub
+        <div className="card_extra">
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">WEEKLY FOLLOWES</p>
+              <span className="material-icons-outlined text-blue">groups</span>
             </div>
-            <span
-              className="material-icons-outlined"
-              id="close_btn"
-              onClick={closeSidebar}
-            >
-              close
-            </span>
+            <span id="yt_followers_w" className="text-primary font-weight-bold"></span>
           </div>
 
-          <ul className="sidebar-list">
-            <style>{`
-              a {
-                text-decoration: none;
-              }
-            `}</style>
-
-            <Link to="/MainDashboard">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">home</span>
-                Dashboard
-              </li>
-            </Link>
-
-            <Link to="/dashboard_yt">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                YouTube
-              </li>
-            </Link>
-
-            <a href="https://www.example.com">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                Facebook
-              </li>
-            </a>
-
-            <a href="https://www.example.com">
-              <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                Twitter
-              </li>
-            </a>
-          </ul>
-        </aside>
-
-        {/* Main */}
-        <main className="main-container">
-          <div className="main-title">
-            <p className="font-weight-bold">YOUTUBE</p>
-            <button id="expend_btn">expend</button>
-            <button id="hide_btn">hide</button>
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">WEEKLY VIEWS</p>
+              <span className="material-icons-outlined text-blue">movie</span>
+            </div>
+            <span id="yt_views_w" className="text-primary font-weight-bold"></span>
           </div>
 
-          <div className="main-cards">
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">FOLLOWES</p>
-                <span className="material-icons-outlined text-blue">groups</span>
-              </div>
-              <span id="yt_followers" className="text-primary font-weight-bold"></span>
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">WEEKLY LIKES</p>
+              <span className="material-icons-outlined text-blue">thumb_up</span>
             </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">VIEWS</p>
-                <span className="material-icons-outlined text-blue">movie</span>
-              </div>
-              <span id="yt_views" className="text-primary font-weight-bold"></span>
-            </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">LIKES</p>
-                <span className="material-icons-outlined text-blue">thumb_up</span>
-              </div>
-              <span id="yt_likes" className="text-primary font-weight-bold"></span>
-            </div>
+            <span id="yt_likes_w" className="text-primary font-weight-bold"></span>
           </div>
 
-          <div className="card_extra">
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">WEEKLY FOLLOWES</p>
-                <span className="material-icons-outlined text-blue">groups</span>
-              </div>
-              <span id="yt_followers_w" className="text-primary font-weight-bold"></span>
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">Monthly FOLLOWES</p>
+              <span className="material-icons-outlined text-blue">groups</span>
             </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">WEEKLY VIEWS</p>
-                <span className="material-icons-outlined text-blue">movie</span>
-              </div>
-              <span id="yt_views_w" className="text-primary font-weight-bold"></span>
-            </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">WEEKLY LIKES</p>
-                <span className="material-icons-outlined text-blue">thumb_up</span>
-              </div>
-              <span id="yt_likes_w" className="text-primary font-weight-bold"></span>
-            </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">Monthly FOLLOWES</p>
-                <span className="material-icons-outlined text-blue">groups</span>
-              </div>
-              <span id="yt_followers_m" className="text-primary font-weight-bold"></span>
-            </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">Monthly VIEWS</p>
-                <span className="material-icons-outlined text-blue">movie</span>
-              </div>
-              <span id="yt_views_m" className="text-primary font-weight-bold"></span>
-            </div>
-
-            <div className="card">
-              <div className="card-inner">
-                <p className="text-primary">Monthly LIKES</p>
-                <span className="material-icons-outlined text-blue">thumb_up</span>
-              </div>
-              <span id="yt_likes_m" className="text-primary font-weight-bold"></span>
-            </div>
+            <span id="yt_followers_m" className="text-primary font-weight-bold"></span>
           </div>
 
-          <div className="button-container">
-            <div className="left-buttons">
-              <button id="daily_btn">weekly</button>
-              <button id="weekly_btn">monthly</button>
-              <button id="monthly_btn">yearly</button>
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">Monthly VIEWS</p>
+              <span className="material-icons-outlined text-blue">movie</span>
             </div>
-
-            <div className="right-buttons">
-              <button id="bar_btn">Bar Chart</button>
-              <button id="lnr_btn">Linear Chart</button>
-            </div>
+            <span id="yt_views_m" className="text-primary font-weight-bold"></span>
           </div>
 
-          <div className="chart_daily">
-            <div className="charts-card">
-              <p className="chart-title">FOLLOWERS GROWTH</p>
-              <div id="weekChart_fl"></div>
+          <div className="card">
+            <div className="card-inner">
+              <p className="text-primary">Monthly LIKES</p>
+              <span className="material-icons-outlined text-blue">thumb_up</span>
             </div>
+            <span id="yt_likes_m" className="text-primary font-weight-bold"></span>
+          </div>
+        </div>
 
-            <div className="charts-card">
-              <p className="chart-title">VIEWS GROWTH</p>
-              <div id="weekChart_vw"></div>
-            </div>
-
-            <div className="charts-card">
-              <p className="chart-title">LIKES GROWTH</p>
-              <div id="weekChart_likes"></div>
-            </div>
+        <div className="button-container">
+          <div className="left-buttons">
+            <button id="daily_btn">weekly</button>
+            <button id="weekly_btn">monthly</button>
+            <button id="monthly_btn">yearly</button>
           </div>
 
-          <div className="chart_weekly_l">
-            <div className="charts-card">
-              <p className="chart-title">FOLLOWERS GROWTH</p>
-              <div id="weekChart_fl_linear"></div>
-            </div>
-            <div className="charts-card">
-              <p className="chart-title">VIEWS GROWTH</p>
-              <div id="weekChart_vw_linear"></div>
-            </div>
-            <div className="charts-card">
-              <p className="chart-title">LIKES GROWTH</p>
-              <div id="weekChart_likes_linear"></div>
-            </div>
+          <div className="right-buttons">
+            <button id="bar_btn">Bar Chart</button>
+            <button id="lnr_btn">Linear Chart</button>
+          </div>
+        </div>
+
+        <div className="chart_daily">
+          <div className="charts-card">
+            <p className="chart-title">FOLLOWERS GROWTH</p>
+            <div id="weekChart_fl"></div>
           </div>
 
-          <div className="chart_weekly">
-            <div className="charts-card">
-              <p className="chart-title">FOLLOWERS GROWTH</p>
-              <div id="monthChart_fl"></div>
-            </div>
-
-            <div className="charts-card">
-              <p className="chart-title">VIEWS GROWTH</p>
-              <div id="monthChart_vw"></div>
-            </div>
-
-            <div className="charts-card">
-              <p className="chart-title">LIKES GROWTH</p>
-              <div id="monthChart_likes"></div>
-            </div>
-          </div>
-          <div className="chart_monthly_l">
-            <div className="charts-card">
-              <p className="chart-title">FOLLOWERS GROWTH</p>
-              <div id="monthChart_fl_linear"></div>
-            </div>
-            <div className="charts-card">
-              <p className="chart-title">VIEWS GROWTH</p>
-              <div id="monthChart_vw_linear"></div>
-            </div>
-            <div className="charts-card">
-              <p className="chart-title">LIKES GROWTH</p>
-              <div id="monthChart_likes_linear"></div>
-            </div>
+          <div className="charts-card">
+            <p className="chart-title">VIEWS GROWTH</p>
+            <div id="weekChart_vw"></div>
           </div>
 
-          <div className="chart_monthly">
-            <div className="charts-card">
-              <p className="chart-title">FOLLOWERS GROWTH</p>
-              <div id="yearChart_fl"></div>
-            </div>
+          <div className="charts-card">
+            <p className="chart-title">LIKES GROWTH</p>
+            <div id="weekChart_likes"></div>
+          </div>
+        </div>
 
-            <div className="charts-card">
-              <p className="chart-title">VIEWS GROWTH</p>
-              <div id="yearChart_vw"></div>
-            </div>
+        <div className="chart_weekly_l">
+          <div className="charts-card">
+            <p className="chart-title">FOLLOWERS GROWTH</p>
+            <div id="weekChart_fl_linear"></div>
+          </div>
+          <div className="charts-card">
+            <p className="chart-title">VIEWS GROWTH</p>
+            <div id="weekChart_vw_linear"></div>
+          </div>
+          <div className="charts-card">
+            <p className="chart-title">LIKES GROWTH</p>
+            <div id="weekChart_likes_linear"></div>
+          </div>
+        </div>
 
-            <div className="charts-card">
-              <p className="chart-title">LIKES GROWTH</p>
-              <div id="yearChart_likes"></div>
-            </div>
+        <div className="chart_weekly">
+          <div className="charts-card">
+            <p className="chart-title">FOLLOWERS GROWTH</p>
+            <div id="monthChart_fl"></div>
           </div>
 
-          <div className="chart_yearly_l">
-            <div className="charts-card">
-              <p className="chart-title">FOLLOWERS GROWTH</p>
-              <div id="yearChart_fl_linear"></div>
-            </div>
-            <div className="charts-card">
-              <p className="chart-title">VIEWS GROWTH</p>
-              <div id="yearChart_vw_linear"></div>
-            </div>
-            <div className="charts-card">
-              <p className="chart-title">LIKES GROWTH</p>
-              <div id="yearChart_likes_linear"></div>
-            </div>
+          <div className="charts-card">
+            <p className="chart-title">VIEWS GROWTH</p>
+            <div id="monthChart_vw"></div>
           </div>
-        </main>
-      {/*Main end*/}
-      </div>}
+
+          <div className="charts-card">
+            <p className="chart-title">LIKES GROWTH</p>
+            <div id="monthChart_likes"></div>
+          </div>
+        </div>
+        <div className="chart_monthly_l">
+          <div className="charts-card">
+            <p className="chart-title">FOLLOWERS GROWTH</p>
+            <div id="monthChart_fl_linear"></div>
+          </div>
+          <div className="charts-card">
+            <p className="chart-title">VIEWS GROWTH</p>
+            <div id="monthChart_vw_linear"></div>
+          </div>
+          <div className="charts-card">
+            <p className="chart-title">LIKES GROWTH</p>
+            <div id="monthChart_likes_linear"></div>
+          </div>
+        </div>
+
+        <div className="chart_monthly">
+          <div className="charts-card">
+            <p className="chart-title">FOLLOWERS GROWTH</p>
+            <div id="yearChart_fl"></div>
+          </div>
+
+          <div className="charts-card">
+            <p className="chart-title">VIEWS GROWTH</p>
+            <div id="yearChart_vw"></div>
+          </div>
+
+          <div className="charts-card">
+            <p className="chart-title">LIKES GROWTH</p>
+            <div id="yearChart_likes"></div>
+          </div>
+        </div>
+
+        <div className="chart_yearly_l">
+          <div className="charts-card">
+            <p className="chart-title">FOLLOWERS GROWTH</p>
+            <div id="yearChart_fl_linear"></div>
+          </div>
+          <div className="charts-card">
+            <p className="chart-title">VIEWS GROWTH</p>
+            <div id="yearChart_vw_linear"></div>
+          </div>
+          <div className="charts-card">
+            <p className="chart-title">LIKES GROWTH</p>
+            <div id="yearChart_likes_linear"></div>
+          </div>
+        </div>
+      </main>
+    {/*Main end*/}
     </div>
   );
   
