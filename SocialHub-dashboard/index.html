@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>SH-Dashboard</title>
+
+    <!--Special Font-->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--Material icons-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+      rel="stylesheet"
+    />
+
+    <!-- Custom CSS-->
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="grid-container">
+      <!--Header start-->
+      <header class="header">
+        <div class="menu-icon" onclick="openSidebar()">
+          <span class="material-icons-outlined">menu</span>
+        </div>
+        <div class="header-left">
+          <span class="material-icons-outlined">search</span>
+        </div>
+        <div class="header-right">
+          <span class="material-icons-outlined">settings</span>
+          <span class="material-icons-outlined">account_circle</span>
+        </div>
+      </header>
+      <!--Header end-->
+
+      <!--Sidebar start-->
+      <aside id="sidebar">
+        <div class="sidebar-title">
+          <div class="sidebar-brand">
+            <span class="material-icons-outlined">dashboard</span>SocialHub
+          </div>
+          <span
+            class="material-icons-outlined"
+            id="close_btn"
+            onclick="closeSidebar()"
+            >close</span
+          >
+        </div>
+
+        <ul class="sidebar-list">
+          <style>
+            a {
+              text-decoration: none;
+            }
+          </style>
+
+          <a href="index.html">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">home</span>Dashboard
+            </li>
+          </a>
+
+          <a href="yt_dashboard.html">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">label_important</span>
+              YouTube
+            </li>
+          </a>
+
+          <a href="https://www.example.com">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">label_important</span>
+              Facebook
+            </li>
+          </a>
+
+          <a href="https://www.example.com">
+            <li class="sidebar-list-item">
+              <span class="material-icons-outlined">label_important</span>
+              Twitter
+            </li>
+          </a>
+        </ul>
+      </aside>
+      <!--Sidebar end-->
+
+      <!--Main start-->
+      <main class="main-container">
+        <div class="main-title">
+          <p class="font-weight-bold">DASHBOARD</p>
+        </div>
+
+        <div class="main-cards">
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">FOLLOWES COMBINED</p>
+              <span class="material-icons-outlined text-blue">groups</span>
+            </div>
+            <span class="text-primary font-weight-bold"> 10347</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">VIEWS COMBINED</p>
+              <span class="material-icons-outlined text-blue">movie</span>
+            </div>
+            <span class="text-primary font-weight-bold"> 2340000</span>
+          </div>
+
+          <div class="card">
+            <div class="card-inner">
+              <p class="text-primary">LIKES COMBINED</p>
+              <span class="material-icons-outlined text-blue">thumb_up</span>
+            </div>
+            <span class="text-primary font-weight-bold"> 4840000</span>
+          </div>
+        </div>
+
+        <div class="charts">
+          <div class="charts-card">
+            <p class="chart-title">Followers Comparison</p>
+            <div id="bar-chart"></div>
+          </div>
+
+          <div class="charts-card">
+            <p class="chart-title">Likes Comparison</p>
+            <div id="bar-chart2"></div>
+          </div>
+        </div>
+
+        <div class="charts2">
+          <div class="charts-card2">
+            <p class="chart-title2">Followers Growth</p>
+            <div id="area-chart"></div>
+          </div>
+        </div>
+      </main>
+      <!--Main end-->
+    </div>
+    <!--SCRIPTS-->
+    <!--apexcharts-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.40.0/apexcharts.min.js"></script>
+    <!--custom js-->
+    <script src="JS/scripts.js"></script>
+  </body>
+</html>
