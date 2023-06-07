@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons+Outlined');
 @import url('https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&family=Montserrat:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
+.linear_chart {
+  display: none;
+}
 .auth-card button {
   width: 25%;
   margin: 10px;

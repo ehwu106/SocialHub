@@ -85,6 +85,9 @@ const renderCharts = (chartId, data, labels) => {
     areaChart.render();
   }
 
+  document.querySelector(chartId).innerHTML = '';
+  document.querySelector(`${chartId}_linear`).innerHTML = '';
+  
   renderBarChart(chartId, data, labels);
   renderAreaChart(`${chartId}_linear`, [{ name: 'YouTube', data }], labels);
 };
