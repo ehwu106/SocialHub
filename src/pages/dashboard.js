@@ -7,6 +7,7 @@ import {
 import Youtube from './youtube';
 import Facebook from './facebook';
 import SignOutButton from './signoutbutton';
+import { Link } from "react-router-dom";
 
 const MainDashboard = (props) => {
   const [dashboardState, setDashboardState] = useState('dashboard');
@@ -75,13 +76,12 @@ const MainDashboard = (props) => {
                 <span className="material-icons-outlined">home</span>Dashboard
               </li>
             </div>
-
-            <div onClick={() => {handleSidebarClick('youtube')}}>
+            <Link to="/dashboard_yt">
               <li className="sidebar-list-item">
-                <span className="material-icons-outlined">label_important</span>
-                YouTube
+                  <span className="material-icons-outlined">label_important</span>
+                  YouTube
               </li>
-            </div>
+            </Link>
 
             <div onClick={() => {handleSidebarClick('facebook')}}>
               <li className="sidebar-list-item">
