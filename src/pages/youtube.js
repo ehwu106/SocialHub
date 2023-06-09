@@ -7,7 +7,7 @@ const Youtube = (props) => {
   // Set the required parameters
   const CLIENT_ID = '964989657567-0s5gaotr644ba5o48qvdn0dls9fkb69s.apps.googleusercontent.com';
   const CLIENT_SECRET = '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';
-  const redirectUri = 'http://localhost:3000/dashboard_yt';
+  const redirectUri = `${window.location.origin}${window.location.pathname}`;
   const [accessToken, setAccessToken] = useState(null);
 
   const [userState, setUserState] = useState(null);
