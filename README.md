@@ -10,6 +10,10 @@ To return to the homepage at this time, delete any paths in the URL.
 
 To logout, press the `Sign Out` button in the upper right hand corner of the Dashboard.
 
+## AWS Amplify Link
+
+You can access our project on AWS Amplify using this link: https://main.d25npu86mig4ez.amplifyapp.com/
+
 ## Installation
 
 Clone the repository via Git and install required node modules via:
