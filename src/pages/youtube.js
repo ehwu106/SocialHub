@@ -199,7 +199,7 @@ const Youtube = (props) => {
     async function getData(){
       try{
         const today = new Date();
-        const currentYear = 2018;
+        const currentYear = date.getFullYear();
         console.log("CURRENTYEAR:", currentYear);
         const currentWeek = Math.ceil(today.getDate() / 7);
         const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
@@ -444,7 +444,7 @@ const Youtube = (props) => {
           <button id="expend_btn">expend</button>
           <button id="hide_btn">hide</button>
         </div>
-        <button onClick={GoogleLogin}>login</button>
+        <button className="main__btn" onClick={GoogleLogin}>login</button>
 
         <div className="main-cards">
           <div className="card">
