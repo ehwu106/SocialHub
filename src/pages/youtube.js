@@ -63,7 +63,8 @@ const Youtube = (props) => {
         'redirect_uri': redirectUri,
         'grant_type': 'authorization_code'
       });
-      
+
+      // Set the options so we send a POST request
       const options = {
         method: 'POST',
         headers: {
@@ -71,7 +72,8 @@ const Youtube = (props) => {
         },
         body: tokenParams.toString(),
       };
-    
+
+      // send the API request
       const response = await fetch(oauth2Token, options);
       const tokens = await response.json();
       // Handle the tokens response as needed
@@ -86,6 +88,7 @@ const Youtube = (props) => {
   };
 
   useEffect(() => {
+    // Get the access token from sessionStoreage
     const storedAccessToken = sessionStorage.getItem('accessToken');
     console.log("stored token", storedAccessToken);
     if (!storedAccessToken && storedAccessToken !== 'undefined') {
@@ -110,7 +113,6 @@ const Youtube = (props) => {
   }
 
   useEffect(() => {
-    //console.log(`ACCESS TOKEN IN USEEFFECT ACCESSTOKEN${accessToken}`)
     /////////////////////// YOUTUBE API/////////////////////////////////////
     function populateDataMap(startDate, endDate, dimensions, maxResults) {
       const url = 'https://youtubeanalytics.googleapis.com/v2/reports'
@@ -125,10 +127,11 @@ const Youtube = (props) => {
       });
 
     // Send the GET request using fetch()
-
     return fetch(`${url}?${params}`)
     .then((response) => response.json())
     .then((data) =>{
+
+      //We will now convert the data 
       console.log(data);
       console.log(`${url}?${params}`);
       const dataMap = new Map();
@@ -138,7 +141,6 @@ const Youtube = (props) => {
 
       while (currentDate <= currentEndDate) {
         let dateKey;
-
         if (dimensions === 'day') {
           dateKey = currentDate.toISOString().split("T")[0];
           currentDate.setDate(currentDate.getDate() + 1);
@@ -148,10 +150,10 @@ const Youtube = (props) => {
         } else if (dimensions === 'channel') {
           return data.rows[0];
         }
-
         dataMap.set(dateKey, [0, 0, 0]);
       }
 
+      // Add 0s to the days that do not have any value
       data.rows.forEach(row => {
         const date = row[0];
         const views = row[1];
@@ -166,6 +168,7 @@ const Youtube = (props) => {
         }
       });
 
+      //Get the values from the data map and conver them into arrays.
       const viewsArray = Array.from(dataMap.values()).map(([firstValue]) => firstValue);
       const likesArray = Array.from(dataMap.values()).map(([_, secondValue]) => secondValue);
       const subsArray = Array.from(dataMap.values()).map(([_, x, thirdValue]) => thirdValue);
@@ -181,6 +184,7 @@ const Youtube = (props) => {
       return `${year}-${String(month).padStart(2, '0')}`;
     }
 
+    //Create the variables
     var weeklyVW;
     var weeklyLikes;
     var weeklyFL;
@@ -191,20 +195,17 @@ const Youtube = (props) => {
     var yearlyLikes;
     var yearlyFL;
 
-    const weeklyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-    const monthlyLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
-    '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
-    '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
-    const yearlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     async function getData(){
       try{
         const today = new Date();
-        const currentYear = date.getFullYear();
-        console.log("CURRENTYEAR:", currentYear);
+        //const currentYear = today.getFullYear();
+        const currentYear = 2018;
         const currentWeek = Math.ceil(today.getDate() / 7);
         const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
 
+        // Wait for all the data to be retrived.
         await Promise.all([
+          // Get weekly data
           populateDataMap(
             `${currentYear}-${currentMonth}-${String(((currentWeek - 1) * 7 + 1)).padStart(2, '0')}`,
             `${currentYear}-${currentMonth}-${String((currentWeek * 7)).padStart(2, '0')}`,
@@ -215,6 +216,7 @@ const Youtube = (props) => {
             weeklyLikes = LK;
             weeklyVW = VW;
           }),
+          // Get monthy data
           populateDataMap(
             `${currentYear}-${currentMonth}-01`,
             `${currentYear}-${currentMonth}-30`,
@@ -225,9 +227,10 @@ const Youtube = (props) => {
             monthlyLikes = LK;
             monthlyVW = VW;
           }),
+          // Get yearly data
           populateDataMap(
-            `${currentYear}-02-01`,
-            `${currentYear + 1}-01-01`,
+            `${currentYear - 1}-12-01`,
+            `${currentYear}-12-01`,
             'month',
             '12'
           ).then(([VW, LK, FL]) => {
@@ -236,9 +239,6 @@ const Youtube = (props) => {
             yearlyVW = VW;
           })
         ]);
-        console.log([weeklyVW, weeklyLikes, weeklyFL]);
-        console.log([monthlyVW, monthlyLikes, monthlyFL]);
-        console.log([yearlyVW, yearlyLikes, yearlyFL]);
 
       } catch (error) {
         console.log(error);
@@ -246,9 +246,15 @@ const Youtube = (props) => {
     }
 
     async function renderAllCharts(){
-      await getData();
-      console.log('rendering charts');
-      /////////////////////YOUTUBE API ENDS///////////////////////////////////////////
+      // Set the label values
+      const weeklyLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      const monthlyLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
+      '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+      '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31'];
+      const yearlyLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+      console.log('Rendering Charts');
+      /////////////////////RENDER CHARTS///////////////////////////////////////////
       renderCharts("#weekChart_fl", weeklyFL, weeklyLabels);
       renderCharts("#weekChart_vw", weeklyVW, weeklyLabels);
       renderCharts("#weekChart_likes", weeklyLikes, weeklyLabels);
@@ -259,12 +265,6 @@ const Youtube = (props) => {
       renderCharts("#yearChart_vw", yearlyVW, yearlyLabels);
       renderCharts("#yearChart_likes", yearlyLikes, yearlyLabels);
     }
-    ///////////////////CHARTS////////////////////
-    if (accessToken && accessToken !== 'undefined'){
-      renderAllCharts();
-      ///////////////////END/////////////////////
-    }
-
 
     ////////////////expend_hide_button_animations/////////////////////////
     document.getElementById('expend_btn').addEventListener('click', function () {
@@ -330,10 +330,15 @@ const Youtube = (props) => {
       var ytFollowers = 111;
       var ytLikes = 222;
       var ytViews = 333;
+  
+      // Gather channel wide stats
       const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
       await populateDataMap(
-        `2014-01-01`,
-        `2023-05-03`,
+        `2004-02-14`,
+        `${year}-${month}-${day}`,
         'channel',
         '5'
       ).then(([_, VW, LK, FL]) => {
@@ -343,15 +348,15 @@ const Youtube = (props) => {
         ytViews = VW;
       })
 
-      await getData();
-
+      // Use already gathered data to get the stats
       var ytFollowersW = sumArray(weeklyFL);
       var ytLikesW = sumArray(weeklyLikes);
       var ytViewsW = sumArray(weeklyVW);
-      var ytFollowersM = sumArray(monthlyFL);
-      var ytLikesM = sumArray(monthlyLikes);
-      var ytViewsM = sumArray(monthlyVW);
-    
+      var ytFollowersM = yearlyFL[today.getMonth()];
+      var ytLikesM = yearlyLikes[today.getMonth()];
+      var ytViewsM = yearlyVW[today.getMonth()];
+
+      //Update the variables in the display
       await Promise.all([
         updateElementTextContent('yt_followers', ytFollowers),
         updateElementTextContent('yt_likes', ytLikes),
@@ -362,42 +367,48 @@ const Youtube = (props) => {
         updateElementTextContent('yt_followers_m', ytFollowersM),
         updateElementTextContent('yt_likes_m', ytLikesM),
         updateElementTextContent('yt_views_m', ytViewsM)
-      ]);
+      ]);    
+
+      document.getElementById('bar_btn').addEventListener('click', function() {
+        chartType = 1;
+        updateChartDisplay();
+      });
+
+      document.getElementById('lnr_btn').addEventListener('click', function() {
+        chartType = 2;
+        updateChartDisplay();
+      });
+
+      document.getElementById('daily_btn').addEventListener('click', function() {
+        chartPeriod = 1;
+        updateChartDisplay();
+      });
+
+      document.getElementById('weekly_btn').addEventListener('click', function() {
+        chartPeriod = 2;
+        updateChartDisplay();
+      });
+
+      document.getElementById('monthly_btn').addEventListener('click', function() {
+        chartPeriod = 3;
+        updateChartDisplay();
+      });
     }
-    
-    document.getElementById('bar_btn').addEventListener('click', function() {
-      chartType = 1;
-      updateChartDisplay();
-    });
-    
-    document.getElementById('lnr_btn').addEventListener('click', function() {
-      chartType = 2;
-      updateChartDisplay();
-    });
-    
-    document.getElementById('daily_btn').addEventListener('click', function() {
-      chartPeriod = 1;
-      updateChartDisplay();
-    });
-    
-    document.getElementById('weekly_btn').addEventListener('click', function() {
-      chartPeriod = 2;
-      updateChartDisplay();
-    });
-    
-    document.getElementById('monthly_btn').addEventListener('click', function() {
-      chartPeriod = 3;
-      updateChartDisplay();
-    });
-    
-    // Initial setup
-    if (accessToken && accessToken !== 'undefined'){
+
+    async function initialize(){
+      await getData();
+      renderAllCharts();
       updateChartDisplay();
       updateStats();
     }
 
-      ////////////////END/////////////////////////
+    // Initialize
+    if (accessToken && accessToken !== 'undefined'){
+      initialize();
+    }
+    ////////////////////END/////////////////////////
   }, [accessToken]);
+
   return (
     <div className="grid-container">
       {/* Sidebar */}
