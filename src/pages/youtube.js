@@ -198,8 +198,8 @@ const Youtube = (props) => {
     async function getData(){
       try{
         const today = new Date();
-        //const currentYear = today.getFullYear();
-        const currentYear = 2018;
+        const currentYear = today.getFullYear();
+        // const currentYear = 2018;
         const currentWeek = Math.ceil(today.getDate() / 7);
         const currentMonth = String(today.getMonth() + 1).padStart(2, '0');
 
