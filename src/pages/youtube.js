@@ -132,8 +132,8 @@ const Youtube = (props) => {
     .then((data) =>{
 
       //We will now convert the data 
-      console.log(data);
-      console.log(`${url}?${params}`);
+      // console.log(data);
+      // console.log(`${url}?${params}`);
       const dataMap = new Map();
       let currentDate = new Date(startDate);
       currentDate.setDate(currentDate.getDate()); //Skip one day because it starts from the day before so it will always be 0
@@ -230,7 +230,7 @@ const Youtube = (props) => {
           // Get yearly data
           populateDataMap(
             `${currentYear - 1}-12-01`,
-            `${currentYear}-12-01`,
+            `${currentYear}-11-01`,
             'month',
             '12'
           ).then(([VW, LK, FL]) => {
@@ -352,9 +352,9 @@ const Youtube = (props) => {
       var ytFollowersW = sumArray(weeklyFL);
       var ytLikesW = sumArray(weeklyLikes);
       var ytViewsW = sumArray(weeklyVW);
-      var ytFollowersM = yearlyFL[today.getMonth()];
-      var ytLikesM = yearlyLikes[today.getMonth()];
-      var ytViewsM = yearlyVW[today.getMonth()];
+      var ytFollowersM = sumArray(monthlyFL);
+      var ytLikesM = sumArray(monthlyLikes);
+      var ytViewsM = sumArray(monthlyVW);
 
       //Update the variables in the display
       await Promise.all([
@@ -397,7 +397,7 @@ const Youtube = (props) => {
 
     async function initialize(){
       await getData();
-      renderAllCharts();
+      await renderAllCharts();
       updateChartDisplay();
       updateStats();
     }
